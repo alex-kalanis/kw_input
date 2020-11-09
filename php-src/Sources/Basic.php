@@ -12,6 +12,7 @@ namespace kalanis\kw_input\Sources;
 class Basic implements ISource
 {
     protected $cliArgs = [];
+    protected $externalArgs = [];
 
     public function setCli(array $cliArgs = []): self
     {
@@ -52,5 +53,16 @@ class Basic implements ISource
     public function &env(): ?array
     {
         return $_ENV;
+    }
+
+    public function &external(): ?array
+    {
+        return $this->externalArgs;
+    }
+
+    public function setExternal(array $externalArgs = []): self
+    {
+        $this->externalArgs = $externalArgs;
+        return $this;
     }
 }

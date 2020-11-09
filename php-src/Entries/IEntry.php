@@ -17,6 +17,7 @@ interface IEntry
     const SOURCE_SESSION = 'session';
     const SOURCE_SERVER = 'server';
     const SOURCE_ENV = 'environment';
+    const SOURCE_EXTERNAL = 'external';
 
     /**
      * Return source of entry

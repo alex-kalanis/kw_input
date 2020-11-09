@@ -23,4 +23,6 @@ interface ISource
     public function &server(): ?array;
 
     public function &env(): ?array;
+
+    public function &external(): ?array;
 }

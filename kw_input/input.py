@@ -75,7 +75,7 @@ class Inputs(IInputs):
         return self
 
     def load_inputs(self):
-        if not self._source:
+        if not isinstance(self._source, ISource):
             raise AttributeError('Unknown source for reading values. Please, set something!')
         self._entries = self._load_input(IEntry.SOURCE_GET, self._source.get()) \
             + self._load_input(IEntry.SOURCE_POST, self._source.post()) \
@@ -83,7 +83,8 @@ class Inputs(IInputs):
             + self._load_input(IEntry.SOURCE_SESSION, self._source.session()) \
             + self._load_input(IEntry.SOURCE_FILES, self._source.files()) \
             + self._load_input(IEntry.SOURCE_ENV, self._source.env()) \
-            + self._load_input(IEntry.SOURCE_SERVER, self._source.server())
+            + self._load_input(IEntry.SOURCE_SERVER, self._source.server()) \
+            + self._load_input(IEntry.SOURCE_EXTERNAL, self._source.external())
 
     def _load_input(self, source: str, input_array=None):
         if not input_array:
@@ -125,6 +126,9 @@ class Inputs(IInputs):
 
     def get_env(self):
         return self.get_in(None, IEntry.SOURCE_ENV)
+
+    def get_external(self):
+        return self.get_in(None, IEntry.SOURCE_EXTERNAL)
 
     def get_in(self, entry_key: str = None, entry_sources = None):
         for entry in self._entries:

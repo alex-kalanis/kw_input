@@ -24,3 +24,6 @@ class ISource:
 
     def env(self):
         raise NotImplementedError('TBA')
+
+    def external(self):
+        raise NotImplementedError('TBA')

@@ -24,6 +24,7 @@ class InputTest(CommonTestClass):
         assert 1 > len(self._iterator_to_array(input.get_env()))
         assert 0 < len(self._iterator_to_array(input.get_basic()))
         assert 1 > len(self._iterator_to_array(input.get_system()))
+        assert 1 > len(self._iterator_to_array(input.get_external()))
 
         entries = input.into_key_object_array(input.get_get())
         assert entries
@@ -69,6 +70,7 @@ class InputTest(CommonTestClass):
         assert 1 > len(self._iterator_to_array(input.get_env()))
         assert 0 < len(self._iterator_to_array(input.get_basic()))
         assert 1 > len(self._iterator_to_array(input.get_system()))
+        assert 1 > len(self._iterator_to_array(input.get_external()))
 
         entries = input.into_key_object_array(input.get_files())
         assert entries
@@ -128,4 +130,7 @@ class MockSource(ISource):
         return None
 
     def env(self):
+        return None
+
+    def external(self):
         return None

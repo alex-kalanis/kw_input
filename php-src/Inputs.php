@@ -48,7 +48,8 @@ class Inputs implements IInputs
             $this->loadInput(Entries\IEntry::SOURCE_SESSION, $this->source->session()),
             $this->loadInput(Entries\IEntry::SOURCE_FILES, $this->source->files()),
             $this->loadInput(Entries\IEntry::SOURCE_ENV, $this->source->env()),
-            $this->loadInput(Entries\IEntry::SOURCE_SERVER, $this->source->server())
+            $this->loadInput(Entries\IEntry::SOURCE_SERVER, $this->source->server()),
+            $this->loadInput(Entries\IEntry::SOURCE_EXTERNAL, $this->source->external())
         );
     }
 
@@ -112,6 +113,11 @@ class Inputs implements IInputs
     public function getEnv(): Traversable
     {
         return $this->getIn(null, [Entries\IEntry::SOURCE_ENV]);
+    }
+
+    public function getExternal(): Traversable
+    {
+        return $this->getIn(null, [Entries\IEntry::SOURCE_EXTERNAL]);
     }
 
     public function getIn(string $entryKey = null, array $entrySources = []): Traversable

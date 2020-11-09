@@ -11,6 +11,7 @@ class IEntry:
     SOURCE_SESSION = 'session'
     SOURCE_SERVER = 'server'
     SOURCE_ENV = 'environment'
+    SOURCE_EXTERNAL = 'external'
 
     def get_source(self) -> str:
         """
@@ -81,6 +82,7 @@ class Entry(IEntry):
         IEntry.SOURCE_SESSION,
         IEntry.SOURCE_SERVER,
         IEntry.SOURCE_ENV,
+        IEntry.SOURCE_EXTERNAL,
     ]
 
     def __init__(self):

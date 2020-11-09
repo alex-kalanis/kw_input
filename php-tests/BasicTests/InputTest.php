@@ -25,6 +25,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getEnv()));
         $this->assertNotEmpty(iterator_to_array($input->getBasic()));
         $this->assertEmpty(iterator_to_array($input->getSystem()));
+        $this->assertEmpty(iterator_to_array($input->getExternal()));
 
         $entries = $input->intoKeyObjectArray($input->getGet());
         $this->assertNotEmpty($entries);
@@ -71,6 +72,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getEnv()));
         $this->assertNotEmpty(iterator_to_array($input->getBasic()));
         $this->assertEmpty(iterator_to_array($input->getSystem()));
+        $this->assertEmpty(iterator_to_array($input->getExternal()));
 
         $entries = $input->intoKeyObjectArray($input->getFiles());
         $this->assertNotEmpty($entries);
@@ -146,6 +148,12 @@ class MockSource implements Sources\ISource
     }
 
     public function &env(): ?array
+    {
+        $content = null;
+        return $content;
+    }
+
+    public function &external(): ?array
     {
         $content = null;
         return $content;

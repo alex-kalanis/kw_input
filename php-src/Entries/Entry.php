@@ -24,6 +24,7 @@ class Entry implements IEntry
         self::SOURCE_SESSION,
         self::SOURCE_SERVER,
         self::SOURCE_ENV,
+        self::SOURCE_EXTERNAL,
     ];
 
     public function setEntry(string $source, string $key, $value = null): self
