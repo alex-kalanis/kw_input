@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\kw_input\Inputs;
+namespace kalanis\kw_input\Entries;
 
 
 /**
  * Class Entry
- * @package kalanis\kw_input\Inputs
+ * @package kalanis\kw_input\Entries
  * Simple entry from source
  * For setting numeric value just re-type set by strval()
  * For setting boolean value just expand previous - strval(intval())

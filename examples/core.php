@@ -28,7 +28,7 @@ class Core2
     public function __construct(array $cliArgs = [])
     {
         $this->inputs = new Inputs();
-        $this->inputs->loadInputs($cliArgs);
+        $this->inputs->setSource($cliArgs)->loadEntries();
         /// ...
     }
 

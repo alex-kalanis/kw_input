@@ -1,6 +1,6 @@
 <?php
 
-use kalanis\kw_input\Inputs\IEntry;
+use kalanis\kw_input\Entries\IEntry;
 use kalanis\kw_input\Parsers;
 
 

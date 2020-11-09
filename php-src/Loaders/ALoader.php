@@ -3,7 +3,7 @@
 namespace kalanis\kw_input\Loaders;
 
 
-use kalanis\kw_input\Inputs;
+use kalanis\kw_input\Entries;
 
 
 /**
@@ -17,7 +17,7 @@ abstract class ALoader
      * Transform input values to something more reliable
      * @param string $source
      * @param array $array
-     * @return Inputs\Entry[]
+     * @return Entries\Entry[]
      */
     abstract public function loadVars(string $source, &$array): array;
 }

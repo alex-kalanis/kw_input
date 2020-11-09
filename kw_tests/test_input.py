@@ -8,11 +8,12 @@ class InputTest(CommonTestClass):
 
     def test_entry(self):
 
-        source = MockSource()
-        source.set_remotes(self.entry_dataset())
+        input = Inputs()
+        input.set_source(self.cli_dataset())  # direct cli
 
-        input = Inputs(source)
-        input.load_inputs(self.cli_dataset())
+        source = MockSource()
+        source.set_remotes(self.entry_dataset(), None, self.cli_dataset())
+        input.set_source(source).load_inputs()
 
         assert 0 < len(self._iterator_to_array(input.get_cli()))
         assert 0 < len(self._iterator_to_array(input.get_get()))
@@ -54,10 +55,10 @@ class InputTest(CommonTestClass):
     def test_files(self):
 
         source = MockSource()
-        source.set_remotes(self.entry_dataset(), None, self.file_dataset())
+        source.set_remotes(self.entry_dataset(), None, None, self.file_dataset())
 
-        input = Inputs(source)
-        input.load_inputs()
+        input = Inputs()
+        input.set_source(source).load_inputs()
 
         assert 1 > len(self._iterator_to_array(input.get_cli()))
         assert 0 < len(self._iterator_to_array(input.get_get()))
@@ -94,17 +95,22 @@ class InputTest(CommonTestClass):
 class MockSource(ISource):
 
     def __init__(self):
+        self._mock_cli = None
         self._mock_get = None
         self._mock_post = None
         self._mock_files = None
         self._mock_session = None
 
-    def set_remotes(self, get, post=None, files=None, session=None):
+    def set_remotes(self, get, post=None, cli=None, files=None, session=None):
+        self._mock_cli = cli
         self._mock_get = get
         self._mock_post = post
         self._mock_files = files
         self._mock_session = session
         return self
+
+    def cli(self):
+        return self._mock_cli
 
     def get(self):
         return self._mock_get

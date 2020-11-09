@@ -5,7 +5,7 @@
 
 // init inputs - they are on the verge for using as global variable
 $inputs = new \kalanis\kw_input\Inputs();
-$inputs->loadInputs($argv); // argv is for params from cli
+$inputs->setSource($argv)->loadEntries(); // argv is for params from cli
 
 /// ...
 

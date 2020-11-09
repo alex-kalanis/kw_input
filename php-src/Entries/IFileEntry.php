@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\kw_input\Inputs;
+namespace kalanis\kw_input\Entries;
 
 
 /**
  * Interface IFileEntry
- * @package kalanis\kw_input\Inputs
+ * @package kalanis\kw_input\Entries
  * File entry interface - how to access uploaded files
  * @link https://www.php.net/manual/en/reserved.variables.files.php
  */

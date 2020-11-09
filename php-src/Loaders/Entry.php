@@ -3,7 +3,7 @@
 namespace kalanis\kw_input\Loaders;
 
 
-use kalanis\kw_input\Inputs;
+use kalanis\kw_input\Entries;
 
 
 /**
@@ -17,12 +17,12 @@ class Entry extends ALoader
      * Transform input values to something more reliable
      * @param string $source
      * @param array $array
-     * @return Inputs\Entry[]
+     * @return Entries\Entry[]
      */
     public function loadVars(string $source, &$array): array
     {
         $result = [];
-        $entries = new Inputs\Entry();
+        $entries = new Entries\Entry();
         foreach ($array as $postedKey => $posted) {
             $entry = clone $entries;
             $entry->setEntry($source, $postedKey, $posted);

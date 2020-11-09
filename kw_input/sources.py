@@ -4,6 +4,9 @@ class ISource:
      * Source of values to parse
     """
 
+    def cli(self):
+        raise NotImplementedError('TBA')
+
     def get(self):
         raise NotImplementedError('TBA')
 

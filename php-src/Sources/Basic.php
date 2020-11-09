@@ -11,6 +11,19 @@ namespace kalanis\kw_input\Sources;
  */
 class Basic implements ISource
 {
+    protected $cliArgs = [];
+
+    public function setCli(array $cliArgs = []): self
+    {
+        $this->cliArgs = $cliArgs;
+        return $this;
+    }
+
+    public function &cli(): ?array
+    {
+        return $this->cliArgs;
+    }
+
     public function &get(): ?array
     {
         return $_GET;

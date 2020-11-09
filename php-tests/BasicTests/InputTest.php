@@ -1,5 +1,6 @@
 <?php
 
+use kalanis\kw_input\Entries;
 use kalanis\kw_input\Inputs;
 use kalanis\kw_input\Sources;
 
@@ -8,11 +9,12 @@ class InputTest extends CommonTestClass
 {
     public function testEntry()
     {
-        $source = new MockSource();
-        $source->setRemotes($this->entryDataset());
+        $input = new Inputs();
+        $input->setSource($this->cliDataset()); // direct cli
 
-        $input = new Inputs($source);
-        $input->loadInputs($this->cliDataset());
+        $source = new MockSource();
+        $source->setRemotes($this->entryDataset(), null, $this->cliDataset());
+        $input->setSource($source)->loadEntries();
 
         $this->assertNotEmpty(iterator_to_array($input->getCli()));
         $this->assertNotEmpty(iterator_to_array($input->getGet()));
@@ -31,34 +33,34 @@ class InputTest extends CommonTestClass
         $this->assertEquals('foo', key($entries));
         $this->assertEquals('foo', $entry->getKey());
         $this->assertEquals('val1', $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('bar', key($entries));
         $this->assertEquals('bar', $entry->getKey());
         $this->assertEquals(['bal1', 'bal2'], $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('baz', key($entries));
         $this->assertEquals('baz', $entry->getKey());
         $this->assertEquals(true, $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('aff', key($entries));
         $this->assertEquals('aff', $entry->getKey());
         $this->assertEquals(42, $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
     }
 
     public function testFiles()
     {
         $source = new MockSource();
-        $source->setRemotes($this->entryDataset(), null, $this->fileDataset());
+        $source->setRemotes($this->entryDataset(), null, null, $this->fileDataset());
 
-        $input = new Inputs($source);
-        $input->loadInputs([]);
+        $input = new Inputs();
+        $input->setSource($source)->loadEntries();
 
         $this->assertEmpty(iterator_to_array($input->getCli()));
         $this->assertNotEmpty(iterator_to_array($input->getGet()));
@@ -77,37 +79,44 @@ class InputTest extends CommonTestClass
         $this->assertEquals('files', key($entries));
         $this->assertEquals('files', $entry->getKey());
         $this->assertEquals('facepalm.jpg', $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('download[file1]', key($entries));
         $this->assertEquals('download[file1]', $entry->getKey());
         $this->assertEquals('MyFile.txt', $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('download[file2]', key($entries));
         $this->assertEquals('download[file2]', $entry->getKey());
         $this->assertEquals('MyFile.jpg', $entry->getValue());
-        $this->assertEquals(Inputs\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
     }
 }
 
 
 class MockSource implements Sources\ISource
 {
+    protected $mockCli;
     protected $mockGet;
     protected $mockPost;
     protected $mockFiles;
     protected $mockSession;
 
-    public function setRemotes(?array $get, ?array $post = null, ?array $files = null, ?array $session = null): self
+    public function setRemotes(?array $get, ?array $post = null, ?array $cli = null, ?array $files = null, ?array $session = null): self
     {
+        $this->mockCli = $cli;
         $this->mockGet = $get;
         $this->mockPost = $post;
         $this->mockFiles = $files;
         $this->mockSession = $session;
         return $this;
+    }
+
+    public function &cli(): ?array
+    {
+        return $this->mockCli;
     }
 
     public function &get(): ?array

@@ -10,6 +10,8 @@ namespace kalanis\kw_input\Sources;
  */
 interface ISource
 {
+    public function &cli(): ?array;
+
     public function &get(): ?array;
 
     public function &post(): ?array;

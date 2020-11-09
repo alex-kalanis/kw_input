@@ -3,7 +3,7 @@
 namespace kalanis\kw_input\Loaders;
 
 
-use kalanis\kw_input\Inputs\IEntry;
+use kalanis\kw_input\Entries\IEntry;
 
 
 /**

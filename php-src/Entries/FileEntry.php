@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\kw_input\Inputs;
+namespace kalanis\kw_input\Entries;
 
 
 /**
  * Class FileEntry
- * @package kalanis\kw_input\Inputs
+ * @package kalanis\kw_input\Entries
  * Input is file and has extra values
  */
 class FileEntry extends Entry implements IFileEntry

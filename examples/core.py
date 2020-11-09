@@ -21,7 +21,7 @@ class Core2:
 
     def __init__(self, cli_args=None):
         self._inputs = Inputs(Basic())
-        self._inputs.load_inputs(cli_args)
+        self._inputs.set_source(cli_args).load_inputs()
         # ...
 
     # ...

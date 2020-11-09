@@ -3,7 +3,7 @@
 namespace kalanis\kw_input\Loaders;
 
 
-use kalanis\kw_input\Inputs;
+use kalanis\kw_input\Entries;
 
 
 /**
@@ -16,7 +16,7 @@ class File extends ALoader
 {
     public function loadVars(string $source, &$array): array
     {
-        $entries = new Inputs\FileEntry();
+        $entries = new Entries\FileEntry();
         $result = [];
         foreach ($array as $postedKey => $posted) {
             if (is_array($posted['name'])) {

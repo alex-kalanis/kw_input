@@ -6,7 +6,7 @@ import sys
 
 # init inputs - they are on the verge for using as global variable
 inputs = Inputs(Basic())
-inputs.load_inputs(sys.argv) # argv is for params from cli
+inputs.set_source(sys.argv).load_inputs() # argv is for params from cli
 
 # ...
 

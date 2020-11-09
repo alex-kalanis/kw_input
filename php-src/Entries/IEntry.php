@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\kw_input\Inputs;
+namespace kalanis\kw_input\Entries;
 
 
 /**
  * Interface IEntry
- * @package kalanis\kw_input\Inputs
+ * @package kalanis\kw_input\Entries
  * Entry interface - this will be shared across the projects
  */
 interface IEntry
