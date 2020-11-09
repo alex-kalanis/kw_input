@@ -111,7 +111,7 @@ class CommonTestClass extends TestCase
         return [
             '--tes' . chr(0) . 'ting=f<o>o',
             '---bar=b**a**z',
-            '-abc',
+            '-a-*c',
         ];
     }
 }

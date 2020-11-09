@@ -15,6 +15,9 @@ class Cli extends AParser
     const DELIMITER_PARAM_VALUE = '=';
     const UNSORTED_PARAM = 'param_';
 
+    protected static $availableLetters = ['a','b','c','d','e','f','g','h','i','j','k','l','m',
+                                          'n','o','p','q','r','s','t','u','v','w','x','y','z'];
+
     /**
      * @param array $input is $argv in boot time
      * @return array
@@ -37,7 +40,9 @@ class Cli extends AParser
                 // just by letters
                 $entry = $this->removeNullBytes(substr($posted, strlen(static::DELIMITER_SHORT_ENTRY)));
                 for ($i=0; $i<strlen($entry); $i++) {
-                    $clearArray[$entry[$i]] = true;
+                    if (in_array(strtolower($entry[$i]), static::$availableLetters)) {
+                        $clearArray[$entry[$i]] = true;
+                    }
                 }
             } else {
                 // rest of the world

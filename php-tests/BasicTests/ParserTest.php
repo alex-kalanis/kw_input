@@ -151,5 +151,9 @@ class ParserTest extends CommonTestClass
         $entry = next($entries);
         $this->assertEquals('-bar', key($entries));
         $this->assertEquals('b**a**z', $entry);
+        $entry = next($entries);
+        $this->assertEquals('a', key($entries));
+        $entry = next($entries);
+        $this->assertEquals('c', key($entries));
     }
 }
