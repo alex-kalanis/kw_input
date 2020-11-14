@@ -3,12 +3,15 @@
 namespace kalanis\kw_input\Entries;
 
 
+use kalanis\kw_input\Interfaces;
+
+
 /**
  * Class FileEntry
  * @package kalanis\kw_input\Entries
  * Input is file and has extra values
  */
-class FileEntry extends Entry implements IFileEntry
+class FileEntry extends Entry implements Interfaces\IFileEntry
 {
     protected $mimeType = '';
     protected $tmpName = '';

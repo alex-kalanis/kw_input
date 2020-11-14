@@ -3,6 +3,9 @@
 namespace kalanis\kw_input\Entries;
 
 
+use kalanis\kw_input\Interfaces;
+
+
 /**
  * Class Entry
  * @package kalanis\kw_input\Entries
@@ -10,7 +13,7 @@ namespace kalanis\kw_input\Entries;
  * For setting numeric value just re-type set by strval()
  * For setting boolean value just expand previous - strval(intval())
  */
-class Entry implements IEntry
+class Entry implements Interfaces\IEntry
 {
     protected $key = '';
     protected $value = '';

@@ -1,6 +1,5 @@
-from kw_input.entries import IEntry
+from kw_input.interfaces import IEntry, ISource
 from kw_input.input import Inputs
-from kw_input.sources import ISource
 from kw_tests.common_class import CommonTestClass
 
 

@@ -1,5 +1,5 @@
 
-from kw_input.entries import IEntry
+from kw_input.interfaces import IEntry
 
 
 class AParser:

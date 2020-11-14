@@ -3,13 +3,16 @@
 namespace kalanis\kw_input\Sources;
 
 
+use kalanis\kw_input\Interfaces;
+
+
 /**
  * Class Basic
  * @package kalanis\kw_input\Sources
  * Source of values to parse and use
  * @codeCoverageIgnore because this is access to php internals
  */
-class Basic implements ISource
+class Basic implements Interfaces\ISource
 {
     protected $cliArgs = [];
     protected $externalArgs = [];

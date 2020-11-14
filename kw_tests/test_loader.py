@@ -1,4 +1,4 @@
-from kw_input.entries import IEntry
+from kw_input.interfaces import IEntry
 from kw_input.loaders import ALoader
 from kw_input.loaders import Factory, File, Entry
 from kw_tests.common_class import CommonTestClass

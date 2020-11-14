@@ -1,29 +1,5 @@
 
-class ISource:
-    """
-     * Source of values to parse
-    """
-
-    def cli(self):
-        raise NotImplementedError('TBA')
-
-    def get(self):
-        raise NotImplementedError('TBA')
-
-    def post(self):
-        raise NotImplementedError('TBA')
-
-    def files(self):
-        raise NotImplementedError('TBA')
-
-    def session(self):
-        raise NotImplementedError('TBA')
-
-    def server(self):
-        raise NotImplementedError('TBA')
-
-    def env(self):
-        raise NotImplementedError('TBA')
-
-    def external(self):
-        raise NotImplementedError('TBA')
+"""
+ * Nothing here, I have no definition of inputs from sources in WSGI servers
+ * Usually each pythonic framework make complete own server
+"""

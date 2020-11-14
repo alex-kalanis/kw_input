@@ -1,4 +1,5 @@
-from kw_input.entries import IEntry, IFileEntry, Entry, FileEntry
+from kw_input.interfaces import IEntry, IFileEntry
+from kw_input.entries import Entry, FileEntry
 from kw_tests.common_class import CommonTestClass
 
 

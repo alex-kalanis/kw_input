@@ -11,11 +11,11 @@ use Traversable;
  * @package kalanis\kw_input
  * Base class for passing info from inputs into objects
  */
-class Inputs implements IInputs
+class Inputs implements Interfaces\IInputs
 {
-    /** @var Entries\IEntry[] */
+    /** @var Interfaces\IEntry[] */
     protected $entries = [];
-    /** @var Sources\ISource */
+    /** @var Interfaces\ISource */
     protected $source = null;
     /** @var Parsers\Factory */
     protected $parserFactory = null;
@@ -29,9 +29,9 @@ class Inputs implements IInputs
         $this->source = new Sources\Basic();
     }
 
-    public function setSource($source = null): IInputs
+    public function setSource($source = null): Interfaces\IInputs
     {
-        if (!empty($source) && ($source instanceof Sources\ISource)) {
+        if (!empty($source) && ($source instanceof Interfaces\ISource)) {
             $this->source = $source;
         } elseif (($this->source instanceof Sources\Basic) && is_array($source)) {
             $this->source->setCli($source);
@@ -42,14 +42,14 @@ class Inputs implements IInputs
     public function loadEntries(): void
     {
         $this->entries = array_merge(
-            $this->loadInput(Entries\IEntry::SOURCE_GET, $this->source->get()),
-            $this->loadInput(Entries\IEntry::SOURCE_POST, $this->source->post()),
-            $this->loadInput(Entries\IEntry::SOURCE_CLI, $this->source->cli()),
-            $this->loadInput(Entries\IEntry::SOURCE_SESSION, $this->source->session()),
-            $this->loadInput(Entries\IEntry::SOURCE_FILES, $this->source->files()),
-            $this->loadInput(Entries\IEntry::SOURCE_ENV, $this->source->env()),
-            $this->loadInput(Entries\IEntry::SOURCE_SERVER, $this->source->server()),
-            $this->loadInput(Entries\IEntry::SOURCE_EXTERNAL, $this->source->external())
+            $this->loadInput(Interfaces\IEntry::SOURCE_GET, $this->source->get()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_POST, $this->source->post()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_CLI, $this->source->cli()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_SESSION, $this->source->session()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_FILES, $this->source->files()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_ENV, $this->source->env()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_SERVER, $this->source->server()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_EXTERNAL, $this->source->external())
         );
     }
 
@@ -66,58 +66,58 @@ class Inputs implements IInputs
     public function getBasic(): Traversable
     {
         return $this->getIn(null, [
-            Entries\IEntry::SOURCE_CLI,
-            Entries\IEntry::SOURCE_GET,
-            Entries\IEntry::SOURCE_POST,
+            Interfaces\IEntry::SOURCE_CLI,
+            Interfaces\IEntry::SOURCE_GET,
+            Interfaces\IEntry::SOURCE_POST,
         ]);
     }
 
     public function getSystem(): Traversable
     {
         return $this->getIn(null, [
-            Entries\IEntry::SOURCE_SERVER,
-            Entries\IEntry::SOURCE_ENV,
+            Interfaces\IEntry::SOURCE_SERVER,
+            Interfaces\IEntry::SOURCE_ENV,
         ]);
     }
 
     public function getCli(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_CLI]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_CLI]);
     }
 
     public function getGet(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_GET]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_GET]);
     }
 
     public function getPost(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_POST]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_POST]);
     }
 
     public function getSession(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_SESSION]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SESSION]);
     }
 
     public function getFiles(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_FILES]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_FILES]);
     }
 
     public function getServer(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_SERVER]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SERVER]);
     }
 
     public function getEnv(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_ENV]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_ENV]);
     }
 
     public function getExternal(): Traversable
     {
-        return $this->getIn(null, [Entries\IEntry::SOURCE_EXTERNAL]);
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_EXTERNAL]);
     }
 
     public function getIn(string $entryKey = null, array $entrySources = []): Traversable
@@ -133,13 +133,13 @@ class Inputs implements IInputs
 
     /**
      * @param Traversable $entries
-     * @return Entries\IEntry[]
+     * @return Interfaces\IEntry[]
      */
     public function intoKeyObjectArray(Traversable $entries): array
     {
         $result = [];
         foreach ($entries as $entry) {
-            /** @var Entries\IEntry $entry */
+            /** @var Interfaces\IEntry $entry */
             $result[$entry->getKey()] = $entry;
         }
         return $result;

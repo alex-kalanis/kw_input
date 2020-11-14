@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\kw_input;
+namespace kalanis\kw_input\Interfaces;
 
 
 use Traversable;
@@ -15,7 +15,7 @@ interface IInputs
 {
     /**
      * Setting the variable sources - from cli (argv), _GET, _POST, _SERVER, ...
-     * @param Sources\ISource|array|null $source
+     * @param ISource|array|null $source
      * @return $this
      */
     public function setSource($source = null): self;
@@ -33,20 +33,20 @@ interface IInputs
      * @param string|null $entryKey
      * @param string[] $entrySources array of constants from Entries\IEntry::SOURCE_*
      * @return Traversable iterator for foreach
-     * @see Entries\IEntry::SOURCE_CLI
-     * @see Entries\IEntry::SOURCE_GET
-     * @see Entries\IEntry::SOURCE_POST
-     * @see Entries\IEntry::SOURCE_FILES
-     * @see Entries\IEntry::SOURCE_SESSION
-     * @see Entries\IEntry::SOURCE_SERVER
-     * @see Entries\IEntry::SOURCE_ENV
+     * @see IEntry::SOURCE_CLI
+     * @see IEntry::SOURCE_GET
+     * @see IEntry::SOURCE_POST
+     * @see IEntry::SOURCE_FILES
+     * @see IEntry::SOURCE_SESSION
+     * @see IEntry::SOURCE_SERVER
+     * @see IEntry::SOURCE_ENV
      */
     public function getIn(string $entryKey = null, array $entrySources = []): Traversable;
 
     /**
      * Reformat iterator from getIn() into array with key as array key and value with the whole entry
      * @param Traversable $entries
-     * @return Entries\IEntry[]
+     * @return IEntry[]
      * Also usually came in pair with previous call - but with a different syntax
      * Beware - due any dict limitations there is a limitation that only the last entry prevails
      *

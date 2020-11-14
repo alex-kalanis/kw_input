@@ -1,8 +1,7 @@
 <?php
 
-use kalanis\kw_input\Entries;
 use kalanis\kw_input\Inputs;
-use kalanis\kw_input\Sources;
+use kalanis\kw_input\Interfaces;
 
 
 class InputTest extends CommonTestClass
@@ -34,25 +33,25 @@ class InputTest extends CommonTestClass
         $this->assertEquals('foo', key($entries));
         $this->assertEquals('foo', $entry->getKey());
         $this->assertEquals('val1', $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('bar', key($entries));
         $this->assertEquals('bar', $entry->getKey());
         $this->assertEquals(['bal1', 'bal2'], $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('baz', key($entries));
         $this->assertEquals('baz', $entry->getKey());
         $this->assertEquals(true, $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('aff', key($entries));
         $this->assertEquals('aff', $entry->getKey());
         $this->assertEquals(42, $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_GET, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entry->getSource());
     }
 
     public function testFiles()
@@ -81,24 +80,24 @@ class InputTest extends CommonTestClass
         $this->assertEquals('files', key($entries));
         $this->assertEquals('files', $entry->getKey());
         $this->assertEquals('facepalm.jpg', $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('download[file1]', key($entries));
         $this->assertEquals('download[file1]', $entry->getKey());
         $this->assertEquals('MyFile.txt', $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $entry->getSource());
 
         $entry = next($entries);
         $this->assertEquals('download[file2]', key($entries));
         $this->assertEquals('download[file2]', $entry->getKey());
         $this->assertEquals('MyFile.jpg', $entry->getValue());
-        $this->assertEquals(Entries\IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $entry->getSource());
     }
 }
 
 
-class MockSource implements Sources\ISource
+class MockSource implements Interfaces\ISource
 {
     protected $mockCli;
     protected $mockGet;

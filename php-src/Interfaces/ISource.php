@@ -1,11 +1,11 @@
 <?php
 
-namespace kalanis\kw_input\Sources;
+namespace kalanis\kw_input\Interfaces;
 
 
 /**
  * Interface ISource
- * @package kalanis\kw_input\Sources
+ * @package kalanis\kw_input\Interfaces
  * Source of values to parse
  */
 interface ISource
