@@ -16,12 +16,12 @@ class IInputs:
         """
         raise NotImplementedError('TBA')
 
-    def load_inputs(self):
+    def load_entries(self):
         """
-         * Load inputs from source into the local entries which will be accessible
+         * Load entries from source into the local entries which will be accessible
          * These two calls came usually in pair
          *
-         * input.set_source(sys.argv).load_inputs()
+         * input.set_source(sys.argv).load_entries()
         """
         raise NotImplementedError('TBA')
 
@@ -74,7 +74,7 @@ class Inputs(IInputs):
             self._source.set_cli(source)
         return self
 
-    def load_inputs(self):
+    def load_entries(self):
         if not isinstance(self._source, ISource):
             raise AttributeError('Unknown source for reading values. Please, set something!')
         self._entries = self._load_input(IEntry.SOURCE_GET, self._source.get()) \

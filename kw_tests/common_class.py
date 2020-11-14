@@ -104,9 +104,3 @@ class CommonTestClass(unittest.TestCase):
             '---bar=b**a**z',
             '-a-*c',
         ]
-
-    def _iterator_to_array(self, iter):
-        cont = []
-        for content in iter:
-            cont.append(content)
-        return cont
