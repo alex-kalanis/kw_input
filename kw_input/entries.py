@@ -14,6 +14,7 @@ class Entry(IEntry):
         IEntry.SOURCE_GET,
         IEntry.SOURCE_POST,
         # IEntry::SOURCE_FILES,  # has own class
+        IEntry.SOURCE_COOKIE,
         IEntry.SOURCE_SESSION,
         IEntry.SOURCE_SERVER,
         IEntry.SOURCE_ENV,

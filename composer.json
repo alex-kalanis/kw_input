@@ -1,14 +1,20 @@
 {
   "name": "alex-kalanis/kw_input",
   "description": "Inputs put in same way - basic interfaces",
-  "keywords": [],
-  "license": "BSD 3-Clause",
-  "type": "project",
+  "keywords": [
+    "parameters",
+    "post",
+    "get",
+    "cli",
+    "input"
+  ],
+  "license": "BSD-3-Clause",
+  "type": "library",
   "require": {
     "php": ">=7.2.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~7.2"
+    "phpunit/phpunit": ">=7.2"
   },
   "autoload": {
     "psr-4": {

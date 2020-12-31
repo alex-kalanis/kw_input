@@ -8,6 +8,7 @@ class IEntry:
     SOURCE_GET = 'get'
     SOURCE_POST = 'post'
     SOURCE_FILES = 'files'
+    SOURCE_COOKIE = 'cookie'
     SOURCE_SESSION = 'session'
     SOURCE_SERVER = 'server'
     SOURCE_ENV = 'environment'
@@ -84,6 +85,9 @@ class ISource:
     def files(self):
         raise NotImplementedError('TBA')
 
+    def cookie(self):
+        raise NotImplementedError('TBA')
+
     def session(self):
         raise NotImplementedError('TBA')
 
@@ -127,6 +131,7 @@ class IInputs:
          * @see Entries.IEntry.SOURCE_GET
          * @see Entries.IEntry.SOURCE_POST
          * @see Entries.IEntry.SOURCE_FILES
+         * @see Entries.IEntry.SOURCE_COOKIE
          * @see Entries.IEntry.SOURCE_SESSION
          * @see Entries.IEntry.SOURCE_SERVER
          * @see Entries.IEntry.SOURCE_ENV
@@ -142,5 +147,17 @@ class IInputs:
          * Beware - due any dict limitations there is a limitation that only the last entry prevails
          *
          * entries = input.into_key_object_array(input.get_in('example', [Entries.IEntry.SOURCE_GET]));
+        """
+        raise NotImplementedError('TBA')
+
+    def into_key_object_object(self, entries):
+        """
+         * Reformat iterator from get_in() into object with access by key as string key and value with the whole entry
+         * @param iterator entries
+         * @return Inputs.Input
+         * Also usually came in pair with previous call - but with a different syntax
+         * Beware - due any dict limitations there is a limitation that only the last entry prevails
+         *
+         * entries_in_object = input.into_key_object_object(input.get_in('example', [Entries.IEntry.SOURCE_GET]));
         """
         raise NotImplementedError('TBA')

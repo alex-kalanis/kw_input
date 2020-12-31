@@ -24,6 +24,7 @@ class Entry implements Interfaces\IEntry
         self::SOURCE_GET,
         self::SOURCE_POST,
         // self::SOURCE_FILES, // has own class
+        self::SOURCE_COOKIE,
         self::SOURCE_SESSION,
         self::SOURCE_SERVER,
         self::SOURCE_ENV,

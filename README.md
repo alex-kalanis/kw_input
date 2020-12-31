@@ -11,13 +11,7 @@ This is the mixed package - contains sever-side implementation in Python and PHP
 ```
 {
     "require": {
-        "alex-kalanis/kw_input": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "http",
-            "url":  "https://github.com/alex-kalanis/kw_input.git"
-        }
+        "alex-kalanis/kw_input": "1.0"
     }
 }
 ```
@@ -30,7 +24,7 @@ familiar with composer)
 
 1.) Use your autoloader (if not already done via Composer autoloader)
 
-2.) Connect the "kw_input" into your app. When it came necessary
+2.) Connect the "kalanis\kw_input" into your app. When it came necessary
 you can extends every library to comply your use-case; mainly your init ad reading.
 
 # Python Installation

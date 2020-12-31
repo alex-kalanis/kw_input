@@ -1,7 +1,52 @@
 
 from kw_input.interfaces import IInputs, IEntry, ISource
-from kw_input.parsers import Factory as ParserFactory
 from kw_input.loaders import Factory as LoaderFactory
+from kw_input.parsers import Factory as ParserFactory
+from kw_input.php import ArrayIteratorProcessor
+
+
+class Input:
+    """
+     * Abstraction of inputs - this is access which can be implemented without the whole bloat of kw_input
+     * but still passed into processing libraries
+    """
+
+    def __init__(self, content):
+        self._content = content
+
+    def __contains__(self, item):
+        return ArrayIteratorProcessor.is_set(self._content, item)
+
+    def __getattr__(self, item):
+        """
+         * Automatic access to child via Element.childAlias()
+        """
+        if ArrayIteratorProcessor.is_set(self._content, item):
+            return ArrayIteratorProcessor.get(self._content, item)
+        else:
+            return None
+
+    def __setattr__(self, key, value):
+        if '_content' != key:
+            self._content = ArrayIteratorProcessor.set(self._content, key, value)
+
+    def __delattr__(self, item):
+        if '_content' != item:
+            self._content = ArrayIteratorProcessor.remove(self._content, item)
+
+    def __iter__(self):
+        self._iter_key = 0
+        return self
+
+    def __next__(self):
+        key = self._iter_key
+        self._iter_key =+ 1
+        if self._iter_key > len(getattr(self, '_content')):
+            raise StopIteration()
+        return self._content[key]
+
+    def __len__(self):
+        return len(getattr(self, '_content'))
 
 
 class Inputs(IInputs):
@@ -30,6 +75,7 @@ class Inputs(IInputs):
         self._entries = self._load_input(IEntry.SOURCE_GET, self._source.get()) \
             + self._load_input(IEntry.SOURCE_POST, self._source.post()) \
             + self._load_input(IEntry.SOURCE_CLI, self._source.cli()) \
+            + self._load_input(IEntry.SOURCE_COOKIE, self._source.cookie()) \
             + self._load_input(IEntry.SOURCE_SESSION, self._source.session()) \
             + self._load_input(IEntry.SOURCE_FILES, self._source.files()) \
             + self._load_input(IEntry.SOURCE_ENV, self._source.env()) \
@@ -43,43 +89,6 @@ class Inputs(IInputs):
         loader = self._loader_factory.get_loader(source)
         return loader.load_vars(source, parser.parse_input(input_array))
 
-    def get_basic(self):
-        return self.get_in(None, (
-            IEntry.SOURCE_CLI,
-            IEntry.SOURCE_GET,
-            IEntry.SOURCE_POST,
-        ))
-
-    def get_system(self):
-        return self.get_in(None, (
-            IEntry.SOURCE_SERVER,
-            IEntry.SOURCE_ENV,
-        ))
-
-    def get_cli(self):
-        return self.get_in(None, IEntry.SOURCE_CLI)
-
-    def get_get(self):
-        return self.get_in(None, IEntry.SOURCE_GET)
-
-    def get_post(self):
-        return self.get_in(None, IEntry.SOURCE_POST)
-
-    def get_session(self):
-        return self.get_in(None, IEntry.SOURCE_SESSION)
-
-    def get_files(self):
-        return self.get_in(None, IEntry.SOURCE_FILES)
-
-    def get_server(self):
-        return self.get_in(None, IEntry.SOURCE_SERVER)
-
-    def get_env(self):
-        return self.get_in(None, IEntry.SOURCE_ENV)
-
-    def get_external(self):
-        return self.get_in(None, IEntry.SOURCE_EXTERNAL)
-
     def get_in(self, entry_key: str = None, entry_sources = None):
         for entry in self._entries:
             allowed_by_key = (not entry_key) or (entry.get_key() == entry_key)
@@ -92,3 +101,9 @@ class Inputs(IInputs):
         for entry in entries:
             result.append((entry.get_key(), entry))
         return dict(result)
+
+    # def into_key_object_object(self, entries):
+    #     result = []
+    #     for entry in entries:
+    #         result.append((entry.get_key(), entry))
+    #     return Input(result)

@@ -1,5 +1,6 @@
 <?php
 
+use kalanis\kw_input\Input;
 use kalanis\kw_input\Inputs;
 use kalanis\kw_input\Interfaces;
 
@@ -8,7 +9,7 @@ class InputTest extends CommonTestClass
 {
     public function testEntry()
     {
-        $input = new Inputs();
+        $input = new MockInputs();
         $input->setSource($this->cliDataset()); // direct cli
 
         $source = new MockSource();
@@ -19,6 +20,7 @@ class InputTest extends CommonTestClass
         $this->assertNotEmpty(iterator_to_array($input->getGet()));
         $this->assertEmpty(iterator_to_array($input->getPost()));
         $this->assertEmpty(iterator_to_array($input->getSession()));
+        $this->assertEmpty(iterator_to_array($input->getCookie()));
         $this->assertEmpty(iterator_to_array($input->getFiles()));
         $this->assertEmpty(iterator_to_array($input->getServer()));
         $this->assertEmpty(iterator_to_array($input->getEnv()));
@@ -59,7 +61,7 @@ class InputTest extends CommonTestClass
         $source = new MockSource();
         $source->setRemotes($this->entryDataset(), null, null, $this->fileDataset());
 
-        $input = new Inputs();
+        $input = new MockInputs();
         $input->setSource($source)->loadEntries();
 
         $this->assertEmpty(iterator_to_array($input->getCli()));
@@ -67,6 +69,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getPost()));
         $this->assertEmpty(iterator_to_array($input->getSession()));
         $this->assertNotEmpty(iterator_to_array($input->getFiles()));
+        $this->assertEmpty(iterator_to_array($input->getCookie()));
         $this->assertEmpty(iterator_to_array($input->getServer()));
         $this->assertEmpty(iterator_to_array($input->getEnv()));
         $this->assertNotEmpty(iterator_to_array($input->getBasic()));
@@ -94,6 +97,56 @@ class InputTest extends CommonTestClass
         $this->assertEquals('MyFile.jpg', $entry->getValue());
         $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $entry->getSource());
     }
+
+    public function testObject()
+    {
+        $input = new MockInputs();
+        $input->setSource($this->cliDataset()); // direct cli
+
+        $source = new MockSource();
+        $source->setRemotes($this->entryDataset());
+        $input->setSource($source)->loadEntries();
+
+        $this->assertNotEmpty(iterator_to_array($input->getGet()));
+
+        /** @var Input $entries */
+        $entries = $input->intoKeyObjectObject($input->getGet());
+        $this->assertNotEmpty(iterator_to_array($entries->getIterator()));
+        $this->assertNotEmpty(count($entries));
+
+        $this->assertTrue(isset($entries['foo']));
+        $this->assertEquals('foo', $entries['foo']->getKey());
+        $this->assertEquals('val1', $entries['foo']->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entries['foo']->getSource());
+
+        $this->assertTrue($entries->offsetExists('bar'));
+        $this->assertEquals('bar', $entries->offsetGet('bar')->getKey());
+        $this->assertEquals(['bal1', 'bal2'], $entries->offsetGet('bar')->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entries->offsetGet('bar')->getSource());
+
+        $this->assertTrue(isset($entries->baz));
+        $this->assertEquals('baz', $entries->baz->getKey());
+        $this->assertEquals(true, $entries->baz->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entries->baz->getSource());
+
+        $this->assertTrue($entries->offsetExists('aff'));
+        $this->assertEquals('aff', $entries->offsetGet('aff')->getKey());
+        $this->assertEquals(42, $entries->offsetGet('aff')->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entries->offsetGet('aff')->getSource());
+
+        $entry = $entries->offsetGet('aff');
+        unset($entries['aff']);
+        $this->assertFalse(isset($entries['aff']));
+        $entries[$entry->getKey()] = $entry;
+        $this->assertTrue($entries->offsetExists('aff'));
+
+        $entry = $entries->baz;
+        unset($entries->baz);
+        $this->assertTrue(empty($entries->baz));
+        $entries->{$entry->getKey()} = $entry;
+        $this->assertTrue(isset($entries->baz));
+    }
+
 }
 
 
@@ -103,14 +156,16 @@ class MockSource implements Interfaces\ISource
     protected $mockGet;
     protected $mockPost;
     protected $mockFiles;
+    protected $mockCookie;
     protected $mockSession;
 
-    public function setRemotes(?array $get, ?array $post = null, ?array $cli = null, ?array $files = null, ?array $session = null): self
+    public function setRemotes(?array $get, ?array $post = null, ?array $cli = null, ?array $files = null, ?array $cookie = null, ?array $session = null): self
     {
         $this->mockCli = $cli;
         $this->mockGet = $get;
         $this->mockPost = $post;
         $this->mockFiles = $files;
+        $this->mockCookie = $cookie;
         $this->mockSession = $session;
         return $this;
     }
@@ -135,6 +190,11 @@ class MockSource implements Interfaces\ISource
         return $this->mockFiles;
     }
 
+    public function &cookie(): ?array
+    {
+        return $this->mockCookie;
+    }
+
     public function &session(): ?array
     {
         return $this->mockSession;
@@ -156,5 +216,71 @@ class MockSource implements Interfaces\ISource
     {
         $content = null;
         return $content;
+    }
+}
+
+
+class MockInputs extends Inputs
+{
+    public function getBasic(): Traversable
+    {
+        return $this->getIn(null, [
+            Interfaces\IEntry::SOURCE_CLI,
+            Interfaces\IEntry::SOURCE_GET,
+            Interfaces\IEntry::SOURCE_POST,
+        ]);
+    }
+
+    public function getSystem(): Traversable
+    {
+        return $this->getIn(null, [
+            Interfaces\IEntry::SOURCE_SERVER,
+            Interfaces\IEntry::SOURCE_ENV,
+        ]);
+    }
+
+    public function getCli(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_CLI]);
+    }
+
+    public function getGet(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_GET]);
+    }
+
+    public function getPost(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_POST]);
+    }
+
+    public function getSession(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SESSION]);
+    }
+
+    public function getCookie(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_COOKIE]);
+    }
+
+    public function getFiles(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_FILES]);
+    }
+
+    public function getServer(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SERVER]);
+    }
+
+    public function getEnv(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_ENV]);
+    }
+
+    public function getExternal(): Traversable
+    {
+        return $this->getIn(null, [Interfaces\IEntry::SOURCE_EXTERNAL]);
     }
 }

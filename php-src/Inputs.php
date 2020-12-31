@@ -3,6 +3,7 @@
 namespace kalanis\kw_input;
 
 
+use ArrayAccess;
 use Traversable;
 
 
@@ -45,6 +46,7 @@ class Inputs implements Interfaces\IInputs
             $this->loadInput(Interfaces\IEntry::SOURCE_GET, $this->source->get()),
             $this->loadInput(Interfaces\IEntry::SOURCE_POST, $this->source->post()),
             $this->loadInput(Interfaces\IEntry::SOURCE_CLI, $this->source->cli()),
+            $this->loadInput(Interfaces\IEntry::SOURCE_COOKIE, $this->source->cookie()),
             $this->loadInput(Interfaces\IEntry::SOURCE_SESSION, $this->source->session()),
             $this->loadInput(Interfaces\IEntry::SOURCE_FILES, $this->source->files()),
             $this->loadInput(Interfaces\IEntry::SOURCE_ENV, $this->source->env()),
@@ -61,63 +63,6 @@ class Inputs implements Interfaces\IInputs
         $parser = $this->parserFactory->getLoader($source);
         $loader = $this->loaderFactory->getLoader($source);
         return $loader->loadVars($source, $parser->parseInput($inputArray));
-    }
-
-    public function getBasic(): Traversable
-    {
-        return $this->getIn(null, [
-            Interfaces\IEntry::SOURCE_CLI,
-            Interfaces\IEntry::SOURCE_GET,
-            Interfaces\IEntry::SOURCE_POST,
-        ]);
-    }
-
-    public function getSystem(): Traversable
-    {
-        return $this->getIn(null, [
-            Interfaces\IEntry::SOURCE_SERVER,
-            Interfaces\IEntry::SOURCE_ENV,
-        ]);
-    }
-
-    public function getCli(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_CLI]);
-    }
-
-    public function getGet(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_GET]);
-    }
-
-    public function getPost(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_POST]);
-    }
-
-    public function getSession(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SESSION]);
-    }
-
-    public function getFiles(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_FILES]);
-    }
-
-    public function getServer(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_SERVER]);
-    }
-
-    public function getEnv(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_ENV]);
-    }
-
-    public function getExternal(): Traversable
-    {
-        return $this->getIn(null, [Interfaces\IEntry::SOURCE_EXTERNAL]);
     }
 
     public function getIn(string $entryKey = null, array $entrySources = []): Traversable
@@ -143,5 +88,14 @@ class Inputs implements Interfaces\IInputs
             $result[$entry->getKey()] = $entry;
         }
         return $result;
+    }
+
+    /**
+     * @param Traversable $entries
+     * @return ArrayAccess
+     */
+    public function intoKeyObjectObject(Traversable $entries): ArrayAccess
+    {
+        return new Input($this->intoKeyObjectArray($entries));
     }
 }

@@ -18,6 +18,8 @@ interface ISource
 
     public function &files(): ?array;
 
+    public function &cookie(): ?array;
+
     public function &session(): ?array;
 
     public function &server(): ?array;

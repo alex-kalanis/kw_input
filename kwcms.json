@@ -3,7 +3,7 @@
   "name": "kw_input",
   "description": "Shareable inputs - basic interfaces",
   "source": "https://github.com/alex-kalanis/kw_input",
-  "license": "BSD 3-Clause",
+  "license": "BSD-3-Clause",
   "require": {
     "php": ">=7.2.0"
   },

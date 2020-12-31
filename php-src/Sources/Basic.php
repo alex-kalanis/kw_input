@@ -43,6 +43,11 @@ class Basic implements Interfaces\ISource
         return $_FILES;
     }
 
+    public function &cookie(): ?array
+    {
+        return $_COOKIE;
+    }
+
     public function &session(): ?array
     {
         return $_SESSION;

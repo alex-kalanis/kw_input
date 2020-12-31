@@ -7,7 +7,7 @@ class InputTest(CommonTestClass):
 
     def test_entry(self):
 
-        input = Inputs()
+        input = MockInputs()
         input.set_source(self.cli_dataset())  # direct cli
 
         source = MockSource()
@@ -18,6 +18,7 @@ class InputTest(CommonTestClass):
         assert 0 < len(list(input.get_get()))
         assert 1 > len(list(input.get_post()))
         assert 1 > len(list(input.get_session()))
+        assert 1 > len(list(input.get_cookie()))
         assert 1 > len(list(input.get_files()))
         assert 1 > len(list(input.get_server()))
         assert 1 > len(list(input.get_env()))
@@ -57,13 +58,14 @@ class InputTest(CommonTestClass):
         source = MockSource()
         source.set_remotes(self.entry_dataset(), None, None, self.file_dataset())
 
-        input = Inputs()
+        input = MockInputs()
         input.set_source(source).load_entries()
 
         assert 1 > len(list(input.get_cli()))
         assert 0 < len(list(input.get_get()))
         assert 1 > len(list(input.get_post()))
         assert 1 > len(list(input.get_session()))
+        assert 1 > len(list(input.get_cookie()))
         assert 0 < len(list(input.get_files()))
         assert 1 > len(list(input.get_server()))
         assert 1 > len(list(input.get_env()))
@@ -92,6 +94,31 @@ class InputTest(CommonTestClass):
         assert 'MyFile.jpg' == entry.get_value()
         assert IEntry.SOURCE_FILES == entry.get_source()
 
+    # def test_object(self):
+    #
+    #     input = MockInputs()
+    #     input.set_source(self.cli_dataset())  # direct cli
+    #
+    #     source = MockSource()
+    #     source.set_remotes(self.entry_dataset())
+    #     input.set_source(source).load_entries()
+    #
+    #     assert 0 < len(list(input.get_get()))
+    #
+    #     entries = input.into_key_object_object(input.get_get())
+    #     assert entries
+    #
+    #     assert entries.baz
+    #     assert 'baz' == entries.baz.get_key()
+    #     assert entries.baz.get_value()
+    #     assert IEntry.SOURCE_GET == entries.baz.get_source()
+    #
+    #     entry = entries.aff
+    #     delattr(entries, 'aff')
+    #     assert 'aff' not in entries
+    #     setattr(entries, entry.get_key(), entry)
+    #     assert entries.aff
+
 
 class MockSource(ISource):
 
@@ -100,13 +127,15 @@ class MockSource(ISource):
         self._mock_get = None
         self._mock_post = None
         self._mock_files = None
+        self._mock_cookie = None
         self._mock_session = None
 
-    def set_remotes(self, get, post=None, cli=None, files=None, session=None):
+    def set_remotes(self, get, post=None, cli=None, files=None, cookie=None, session=None):
         self._mock_cli = cli
         self._mock_get = get
         self._mock_post = post
         self._mock_files = files
+        self._mock_cookie = cookie
         self._mock_session = session
         return self
 
@@ -122,6 +151,9 @@ class MockSource(ISource):
     def files(self):
         return self._mock_files
 
+    def cookie(self):
+        return self._mock_cookie
+
     def session(self):
         return self._mock_session
 
@@ -133,3 +165,46 @@ class MockSource(ISource):
 
     def external(self):
         return None
+
+
+class MockInputs(Inputs):
+
+    def get_basic(self):
+        return self.get_in(None, (
+            IEntry.SOURCE_CLI,
+            IEntry.SOURCE_GET,
+            IEntry.SOURCE_POST,
+        ))
+
+    def get_system(self):
+        return self.get_in(None, (
+            IEntry.SOURCE_SERVER,
+            IEntry.SOURCE_ENV,
+        ))
+
+    def get_cli(self):
+        return self.get_in(None, IEntry.SOURCE_CLI)
+
+    def get_get(self):
+        return self.get_in(None, IEntry.SOURCE_GET)
+
+    def get_post(self):
+        return self.get_in(None, IEntry.SOURCE_POST)
+
+    def get_session(self):
+        return self.get_in(None, IEntry.SOURCE_SESSION)
+
+    def get_cookie(self):
+        return self.get_in(None, IEntry.SOURCE_COOKIE)
+
+    def get_files(self):
+        return self.get_in(None, IEntry.SOURCE_FILES)
+
+    def get_server(self):
+        return self.get_in(None, IEntry.SOURCE_SERVER)
+
+    def get_env(self):
+        return self.get_in(None, IEntry.SOURCE_ENV)
+
+    def get_external(self):
+        return self.get_in(None, IEntry.SOURCE_EXTERNAL)

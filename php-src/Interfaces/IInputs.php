@@ -3,6 +3,7 @@
 namespace kalanis\kw_input\Interfaces;
 
 
+use ArrayAccess;
 use Traversable;
 
 
@@ -37,6 +38,7 @@ interface IInputs
      * @see IEntry::SOURCE_GET
      * @see IEntry::SOURCE_POST
      * @see IEntry::SOURCE_FILES
+     * @see IEntry::SOURCE_COOKIE
      * @see IEntry::SOURCE_SESSION
      * @see IEntry::SOURCE_SERVER
      * @see IEntry::SOURCE_ENV
@@ -53,4 +55,15 @@ interface IInputs
      * $entries = $input->intoKeyObjectArray($input->getIn('example', [Entries\IEntry::SOURCE_GET]));
      */
     public function intoKeyObjectArray(Traversable $entries): array;
+
+    /**
+     * Reformat iterator and puut it into packing object
+     * @param Traversable $entries
+     * @return ArrayAccess
+     * Also usually came in pair with previous call - but with a different syntax
+     * Beware - due any dict limitations there is a limitation that only the last entry prevails
+     *
+     * $entriesInObject = $input->intoKeyObjectObject($input->getIn('example', [Entries\IEntry::SOURCE_GET]));
+     */
+    public function intoKeyObjectObject(Traversable $entries): ArrayAccess;
 }

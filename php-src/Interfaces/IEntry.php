@@ -14,6 +14,7 @@ interface IEntry
     const SOURCE_GET = 'get';
     const SOURCE_POST = 'post';
     const SOURCE_FILES = 'files';
+    const SOURCE_COOKIE = 'cookie';
     const SOURCE_SESSION = 'session';
     const SOURCE_SERVER = 'server';
     const SOURCE_ENV = 'environment';
