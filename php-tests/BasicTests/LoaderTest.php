@@ -2,6 +2,7 @@
 
 use kalanis\kw_input\Interfaces\IEntry;
 use kalanis\kw_input\Loaders;
+use kalanis\kw_input\Parsers;
 
 
 class LoaderTest extends CommonTestClass
@@ -83,5 +84,40 @@ class LoaderTest extends CommonTestClass
         $this->assertEquals('/tmp/php/php7s4ag4', $entry->getTempName());
         $this->assertEquals(UPLOAD_ERR_PARTIAL, $entry->getError());
         $this->assertEquals(3075, $entry->getSize());
+    }
+
+    public function testCliFile()
+    {
+        $data = new Loaders\CliEntry();
+        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
+
+        $cli = new Parsers\Cli();
+        $dataset = $this->cliDataset();
+        $entries = $data->loadVars(IEntry::SOURCE_CLI, $cli->parseInput($dataset));
+
+        $entry = reset($entries);
+        $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
+        $this->assertEquals('testing', $entry->getKey());
+        $this->assertEquals('foo', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
+        $this->assertEquals('bar', $entry->getKey());
+        $this->assertEquals('baz', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals('file1', $entry->getKey());
+        $this->assertEquals('./data/tester.gif', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals('file2', $entry->getKey());
+        $this->assertEquals('data/testing.1.txt', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
+        $this->assertEquals('file3', $entry->getKey());
+        $this->assertEquals('./data/testing.2.txt', $entry->getValue());
     }
 }

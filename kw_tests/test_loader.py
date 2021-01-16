@@ -1,6 +1,7 @@
 from kw_input.interfaces import IEntry
 from kw_input.loaders import ALoader
-from kw_input.loaders import Factory, File, Entry
+from kw_input.loaders import Factory, File, Entry, CliEntry
+from kw_input.parsers import Cli
 from kw_tests.common_class import CommonTestClass
 
 
@@ -70,3 +71,32 @@ class LoaderTest(CommonTestClass):
         assert '/tmp/php/php7s4ag4' == entries[2].get_temp_name()
         assert 3 == entries[2].get_error()
         assert 3075 == entries[2].get_size()
+
+    def test_cli_file(self):
+        import os
+        data = CliEntry()
+        data.set_basic_path(os.getcwd() + os.sep.join(('', '..', 'php-tests')))  # to php data files
+
+        assert isinstance(data, ALoader)
+
+        entries = data.load_vars(IEntry.SOURCE_CLI, Cli().parse_input(self.cli_dataset()))
+
+        assert IEntry.SOURCE_CLI == entries[0].get_source()
+        assert 'testing' == entries[0].get_key()
+        assert 'foo' == entries[0].get_value()
+
+        assert IEntry.SOURCE_CLI == entries[1].get_source()
+        assert 'bar' == entries[1].get_key()
+        assert 'baz' == entries[1].get_value()
+
+        assert IEntry.SOURCE_FILES == entries[2].get_source()
+        assert 'file1' == entries[2].get_key()
+        assert './data/tester.gif' == entries[2].get_value()
+
+        assert IEntry.SOURCE_FILES == entries[3].get_source()
+        assert 'file2' == entries[3].get_key()
+        assert 'data/testing.1.txt' == entries[3].get_value()
+
+        assert IEntry.SOURCE_CLI == entries[4].get_source()
+        assert 'file3' == entries[4].get_key()
+        assert './data/testing.2.txt' == entries[4].get_value()

@@ -93,6 +93,9 @@ class CommonTestClass(unittest.TestCase):
         return [
             '--testing=foo',
             '--bar=baz',
+            '--file1=./data/tester.gif',
+            '--file2=data/testing.1.txt',
+            '--file3=./data/testing.2.txt',
             '-abc',
             'known',
             'what',

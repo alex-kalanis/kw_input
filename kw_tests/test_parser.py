@@ -142,11 +142,17 @@ class ParserTest(CommonTestClass):
         assert 'foo' == entries[0][1]
         assert 'bar' == entries[1][0]
         assert 'baz' == entries[1][1]
-        assert 'a' == entries[2][0]
-        assert 'b' == entries[3][0]
-        assert 'c' == entries[4][0]
-        assert 'known' == entries[5][1]
-        assert 'what' == entries[6][1]
+        assert 'file1' == entries[2][0]
+        assert './data/tester.gif' == entries[2][1]
+        assert 'file2' == entries[3][0]
+        assert 'data/testing.1.txt' == entries[3][1]
+        assert 'file3' == entries[4][0]
+        assert './data/testing.2.txt' == entries[4][1]
+        assert 'a' == entries[5][0]
+        assert 'b' == entries[6][0]
+        assert 'c' == entries[7][0]
+        assert 'known' == entries[8][1]
+        assert 'what' == entries[9][1]
 
     def test_strange_cli(self):
         data = Cli()

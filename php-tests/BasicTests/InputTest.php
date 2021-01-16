@@ -21,7 +21,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getPost()));
         $this->assertEmpty(iterator_to_array($input->getSession()));
         $this->assertEmpty(iterator_to_array($input->getCookie()));
-        $this->assertEmpty(iterator_to_array($input->getFiles()));
+        $this->assertNotEmpty(iterator_to_array($input->getFiles())); // seems strange, but there are files from Cli
         $this->assertEmpty(iterator_to_array($input->getServer()));
         $this->assertEmpty(iterator_to_array($input->getEnv()));
         $this->assertNotEmpty(iterator_to_array($input->getBasic()));

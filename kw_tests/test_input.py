@@ -19,7 +19,8 @@ class InputTest(CommonTestClass):
         assert 1 > len(list(input.get_post()))
         assert 1 > len(list(input.get_session()))
         assert 1 > len(list(input.get_cookie()))
-        assert 1 > len(list(input.get_files()))
+        assert 1 > len(list(input.get_files()))  # paths not translated into files
+        # assert 0 < len(list(input.get_files()))  # seems strange, but there are files from Cli
         assert 1 > len(list(input.get_server()))
         assert 1 > len(list(input.get_env()))
         assert 0 < len(list(input.get_basic()))
