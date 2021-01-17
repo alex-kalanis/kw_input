@@ -61,6 +61,9 @@ class CliEntry extends ALoader
 
     protected function checkFile($path): ?string
     {
+        if (!is_string($path)) {
+            return null;
+        }
         $isFull = $path[0] == DIRECTORY_SEPARATOR;
         $known = realpath($isFull ? $path : static::$basicPath . DIRECTORY_SEPARATOR . $path );
         return (false === $known) ? null : $known ;
