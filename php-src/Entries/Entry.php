@@ -58,4 +58,9 @@ class Entry implements Interfaces\IEntry
     {
         return $this->value;
     }
+
+    public function __toString()
+    {
+        return strval($this->getValue());
+    }
 }

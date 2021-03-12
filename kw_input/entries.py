@@ -26,6 +26,9 @@ class Entry(IEntry):
         self._value = ''
         self._source = ''
 
+    def __str__(self):
+        return str(self.get_value())
+
     def set_entry(self, source: str, key: str, value=None):
         self._key = key
         self._value = value

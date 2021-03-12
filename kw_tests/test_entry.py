@@ -10,7 +10,7 @@ class EntryTest(CommonTestClass):
         assert isinstance(data, IEntry)
         assert not data.get_source()
         assert not data.get_key()
-        assert not data.get_value()
+        assert not data.__str__()
 
         data.set_entry('different', 'foz', 'wuz')
         assert not data.get_source()

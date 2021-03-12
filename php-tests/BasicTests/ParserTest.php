@@ -124,7 +124,10 @@ class ParserTest extends CommonTestClass
         $this->assertEquals('foo', $entry);
         $entry = next($entries);
         $this->assertEquals('bar', key($entries));
-        $this->assertEquals('baz', $entry);
+        $this->assertEquals(['baz', 'eek'], $entry);
+        $entry = next($entries);
+        $this->assertEquals('der', key($entries));
+        $this->assertEquals(true, $entry);
         $entry = next($entries);
         $this->assertEquals('file1', key($entries));
         $this->assertEquals('./data/tester.gif', $entry);

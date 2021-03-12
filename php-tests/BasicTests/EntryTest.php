@@ -13,7 +13,7 @@ class EntryTest extends CommonTestClass
 
         $this->assertEmpty($data->getSource());
         $this->assertEmpty($data->getKey());
-        $this->assertEmpty($data->getValue());
+        $this->assertEmpty($data->__toString());
 
         $data->setEntry('different', 'foz', 'wuz');
         $this->assertEmpty($data->getSource());

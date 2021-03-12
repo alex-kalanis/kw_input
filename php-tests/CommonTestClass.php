@@ -100,6 +100,8 @@ class CommonTestClass extends TestCase
         return [
             '--testing=foo',
             '--bar=baz',
+            '--bar=eek',
+            '--der',
             '--file1=./data/tester.gif',
             '--file2=data/testing.1.txt',
             '--file3=./data/testing.2.txt',

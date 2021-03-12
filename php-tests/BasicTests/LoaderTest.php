@@ -103,7 +103,12 @@ class LoaderTest extends CommonTestClass
         $entry = next($entries);
         $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
         $this->assertEquals('bar', $entry->getKey());
-        $this->assertEquals('baz', $entry->getValue());
+        $this->assertEquals(['baz', 'eek'], $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
+        $this->assertEquals('der', $entry->getKey());
+        $this->assertEquals(true, $entry->getValue());
 
         $entry = next($entries);
         $this->assertEquals(IEntry::SOURCE_FILES, $entry->getSource());

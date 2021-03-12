@@ -7,6 +7,7 @@ namespace kalanis\kw_input\Parsers;
  * Class Cli
  * @package kalanis\kw_input\Parsers
  * Parse input from command line
+ * Also accepts multiple params and returns them as array
  */
 class Cli extends AParser
 {
@@ -29,12 +30,26 @@ class Cli extends AParser
         foreach ($input as &$posted) {
             if (0 === strpos($posted, static::DELIMITER_LONG_ENTRY)) {
                 // large params
+                $entry = substr($posted, strlen(static::DELIMITER_LONG_ENTRY));
                 if (false !== strpos($posted, static::DELIMITER_PARAM_VALUE)) {
-                    $entry = substr($posted, strlen(static::DELIMITER_LONG_ENTRY));
+                    // we have got some value, so prepare it
                     list($key, $value) = explode(static::DELIMITER_PARAM_VALUE, $entry, 2);
-                    $clearArray[$this->removeNullBytes($key)] = $this->removeNullBytes($value);
+                    $addKey = $this->removeNullBytes($key);
+                    $addValue = $this->removeNullBytes($value);
                 } else {
-                    $clearArray[$this->removeNullBytes($posted)] = true;
+                    // we have no value set
+                    $addKey = $this->removeNullBytes($entry);
+                    $addValue = true;
+                }
+
+                if (isset($clearArray[$addKey])) {
+                    // if there is multiple inputs with the same key, propagate it as array
+                    if (!is_array($clearArray[$addKey])) {
+                        $clearArray[$addKey] = [$clearArray[$addKey]];
+                    }
+                    $clearArray[$addKey][] = $addValue;
+                } else { // otherwise simple add
+                    $clearArray[$addKey] = $addValue;
                 }
             } elseif (0 === strpos($posted, static::DELIMITER_SHORT_ENTRY)) {
                 // just by letters
