@@ -101,6 +101,7 @@ class CommonTestClass extends TestCase
             '--testing=foo',
             '--bar=baz',
             '--bar=eek',
+            '--mko=',
             '--der',
             '--file1=./data/tester.gif',
             '--file2=data/testing.1.txt',

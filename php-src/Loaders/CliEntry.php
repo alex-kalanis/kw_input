@@ -61,7 +61,7 @@ class CliEntry extends ALoader
 
     protected function checkFile($path): ?string
     {
-        if (!is_string($path)) {
+        if (!is_string($path) || empty($path)) {
             return null;
         }
         $isFull = $path[0] == DIRECTORY_SEPARATOR;
@@ -71,13 +71,13 @@ class CliEntry extends ALoader
 
     protected function getType($path): string
     {
-        $ftype = 'application/octet-stream';
-        $finfo = @new finfo(FILEINFO_MIME_TYPE);
-        $fres = @$finfo->file($path);
-        if (is_string($fres) && !empty($fres)) {
-            $ftype = $fres;
+        $fType = 'application/octet-stream';
+        $fInfo = @new finfo(FILEINFO_MIME_TYPE);
+        $fRes = @$fInfo->file($path);
+        if (is_string($fRes) && !empty($fRes)) {
+            $fType = $fRes;
         }
-        return $ftype;
+        return $fType;
     }
 
     protected function getSize($path): int
