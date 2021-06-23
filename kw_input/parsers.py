@@ -75,9 +75,27 @@ class Cli(AParser):
                 if Cli.DELIMITER_PARAM_VALUE in posted:
                     entry = posted[len(Cli.DELIMITER_LONG_ENTRY):]
                     inside = entry.split(Cli.DELIMITER_PARAM_VALUE, 2)
+                    add_key = self._remove_null_bytes(inside[0])
+                    add_value = self._remove_null_bytes(inside[1])
                     clear_array.append((self._remove_null_bytes(inside[0]), self._remove_null_bytes(inside[1])))
                 else:
                     clear_array.append((self._remove_null_bytes(posted), True))
+                    add_key = self._remove_null_bytes(posted)
+                    add_value = True
+
+                if add_key in dict(clear_array).keys():
+                    new_array = []
+                    for key, value in clear_array:
+                        if key == add_key:
+                            new_value = value if isinstance(value, list) else [value]
+                            new_value.append(add_value)
+                            new_array.append((key, new_value))
+                        else:
+                            new_array.append((key, value))
+                    clear_array = new_array
+                else:
+                    clear_array.append((add_key, add_value))
+
             elif Cli.DELIMITER_SHORT_ENTRY == posted[0:len(Cli.DELIMITER_SHORT_ENTRY)]:
                 # just by letters
                 entry = self._remove_null_bytes(posted[len(Cli.DELIMITER_SHORT_ENTRY)-1:])
