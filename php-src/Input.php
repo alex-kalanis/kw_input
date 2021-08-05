@@ -4,6 +4,7 @@ namespace kalanis\kw_input;
 
 
 use ArrayAccess, IteratorAggregate, Traversable, Countable, ArrayIterator;
+use kalanis\kw_input\Entries\Entry;
 
 
 /**
@@ -19,7 +20,7 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
 
     public function __construct(array $inputs)
     {
-        $this->inputs = $inputs;
+        $this->inputs = &$inputs;
     }
 
     public final function __get($offset)
@@ -45,12 +46,16 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
     /**
      * Implementing ArrayAccess
      * @param string|int|null $offset
-     * @param Interfaces\IEntry $value
+     * @param Interfaces\IEntry|string|float|int|bool $value
      */
     public final function offsetSet($offset, $value): void
     {
         if ($value instanceof Interfaces\IEntry) {
             $this->inputs[$offset] = $value;
+        } else {
+            $entry = new Entry();
+            $entry->setEntry(Interfaces\IEntry::SOURCE_EXTERNAL, $offset, $value);
+            $this->inputs[$offset] = $entry;
         }
     }
 

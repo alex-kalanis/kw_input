@@ -3,6 +3,7 @@
 use kalanis\kw_input\Input;
 use kalanis\kw_input\Inputs;
 use kalanis\kw_input\Interfaces;
+use kalanis\kw_input\Variables;
 
 
 class InputTest extends CommonTestClass
@@ -11,6 +12,7 @@ class InputTest extends CommonTestClass
     {
         $input = new MockInputs();
         $input->setSource($this->cliDataset()); // direct cli
+        $variables = new Variables($input);
 
         $source = new MockSource();
         $source->setRemotes($this->entryDataset(), null, $this->cliDataset());
@@ -28,7 +30,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getSystem()));
         $this->assertEmpty(iterator_to_array($input->getExternal()));
 
-        $entries = $input->intoKeyObjectArray($input->getGet());
+        $entries = $variables->getInArray(null, [Interfaces\IEntry::SOURCE_GET]);
         $this->assertNotEmpty($entries);
 
         $entry = reset($entries);
@@ -63,6 +65,7 @@ class InputTest extends CommonTestClass
 
         $input = new MockInputs();
         $input->setSource($source)->loadEntries();
+        $variables = new Variables($input);
 
         $this->assertEmpty(iterator_to_array($input->getCli()));
         $this->assertNotEmpty(iterator_to_array($input->getGet()));
@@ -76,7 +79,7 @@ class InputTest extends CommonTestClass
         $this->assertEmpty(iterator_to_array($input->getSystem()));
         $this->assertEmpty(iterator_to_array($input->getExternal()));
 
-        $entries = $input->intoKeyObjectArray($input->getFiles());
+        $entries = $variables->getInArray(null, [Interfaces\IEntry::SOURCE_FILES]);
         $this->assertNotEmpty($entries);
 
         $entry = reset($entries);
@@ -106,11 +109,12 @@ class InputTest extends CommonTestClass
         $source = new MockSource();
         $source->setRemotes($this->entryDataset());
         $input->setSource($source)->loadEntries();
+        $variables = new Variables($input);
 
         $this->assertNotEmpty(iterator_to_array($input->getGet()));
 
         /** @var Input $entries */
-        $entries = $input->intoKeyObjectObject($input->getGet());
+        $entries = $variables->getInObject(null, [Interfaces\IEntry::SOURCE_GET]);
         $this->assertNotEmpty(iterator_to_array($entries->getIterator()));
         $this->assertNotEmpty(count($entries));
 
@@ -133,6 +137,11 @@ class InputTest extends CommonTestClass
         $this->assertEquals('aff', $entries->offsetGet('aff')->getKey());
         $this->assertEquals(42, $entries->offsetGet('aff')->getValue());
         $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entries->offsetGet('aff')->getSource());
+
+        $this->assertFalse($entries->offsetExists('uhb'));
+        $entries->offsetSet('uhb', 'feaht');
+        $this->assertEquals('feaht', $entries->offsetGet('uhb')->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('uhb')->getSource());
 
         $entry = $entries->offsetGet('aff');
         unset($entries['aff']);
@@ -170,49 +179,49 @@ class MockSource implements Interfaces\ISource
         return $this;
     }
 
-    public function &cli(): ?array
+    public function cli(): ?array
     {
         return $this->mockCli;
     }
 
-    public function &get(): ?array
+    public function get(): ?array
     {
         return $this->mockGet;
     }
 
-    public function &post(): ?array
+    public function post(): ?array
     {
         return $this->mockPost;
     }
 
-    public function &files(): ?array
+    public function files(): ?array
     {
         return $this->mockFiles;
     }
 
-    public function &cookie(): ?array
+    public function cookie(): ?array
     {
         return $this->mockCookie;
     }
 
-    public function &session(): ?array
+    public function session(): ?array
     {
         return $this->mockSession;
     }
 
-    public function &server(): ?array
+    public function server(): ?array
     {
         $content = null;
         return $content;
     }
 
-    public function &env(): ?array
+    public function env(): ?array
     {
         $content = null;
         return $content;
     }
 
-    public function &external(): ?array
+    public function external(): ?array
     {
         $content = null;
         return $content;

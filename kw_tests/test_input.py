@@ -1,5 +1,5 @@
 from kw_input.interfaces import IEntry, ISource
-from kw_input.input import Inputs
+from kw_input.input import Inputs, Variables
 from kw_tests.common_class import CommonTestClass
 
 
@@ -13,6 +13,7 @@ class InputTest(CommonTestClass):
         source = MockSource()
         source.set_remotes(self.entry_dataset(), None, self.cli_dataset())
         input.set_source(source).load_entries()
+        helper = Variables(input)
 
         assert 0 < len(list(input.get_cli()))
         assert 0 < len(list(input.get_get()))
@@ -27,7 +28,7 @@ class InputTest(CommonTestClass):
         assert 1 > len(list(input.get_system()))
         assert 1 > len(list(input.get_external()))
 
-        entries = input.into_key_object_array(input.get_get())
+        entries = helper.get_in_array(None, [IEntry.SOURCE_GET])
         assert entries
 
         assert 'foo' in entries.keys()
@@ -61,6 +62,7 @@ class InputTest(CommonTestClass):
 
         input = MockInputs()
         input.set_source(source).load_entries()
+        helper = Variables(input)
 
         assert 1 > len(list(input.get_cli()))
         assert 0 < len(list(input.get_get()))
@@ -74,7 +76,7 @@ class InputTest(CommonTestClass):
         assert 1 > len(list(input.get_system()))
         assert 1 > len(list(input.get_external()))
 
-        entries = input.into_key_object_array(input.get_files())
+        entries = helper.get_in_array(None, [IEntry.SOURCE_FILES])
         assert entries
 
         assert 'files' in entries.keys()
@@ -103,10 +105,11 @@ class InputTest(CommonTestClass):
     #     source = MockSource()
     #     source.set_remotes(self.entry_dataset())
     #     input.set_source(source).load_entries()
+    #     helper = Variables(input)
     #
     #     assert 0 < len(list(input.get_get()))
     #
-    #     entries = input.into_key_object_object(input.get_get())
+    #     entries = helper.get_in_object(None, [IEntry.SOURCE_GET])
     #     assert entries
     #
     #     assert entries.baz

@@ -2,6 +2,8 @@
 
 /// ...
 
+// access to session - must start first
+session_start();
 
 // init inputs - they are on the verge for using as global variable
 $inputs = new \kalanis\kw_input\Inputs();

@@ -138,26 +138,34 @@ class IInputs:
         """
         raise NotImplementedError('TBA')
 
-    def into_key_object_array(self, entries):
+
+class IVariables:
+    """
+     * Helper interface which allows us access variables from input
+    """
+
+    def get_in_array(self, entry_key: str = None, entry_sources = None):
         """
-         * Reformat iterator from get_in() into array with key as array key and value with the whole entry
-         * @param iterator entries
+         * Reformat into array with key as array key and value with the whole entry
+         * @param string|None entry_key
+         * @param string[] entry_sources
          * @return Entries.IEntry[]
          * Also usually came in pair with previous call - but with a different syntax
          * Beware - due any dict limitations there is a limitation that only the last entry prevails
          *
-         * entries = input.into_key_object_array(input.get_in('example', [Entries.IEntry.SOURCE_GET]));
+         * entries = variables.get_in_array('example', [Entries.IEntry.SOURCE_GET]);
         """
         raise NotImplementedError('TBA')
 
-    def into_key_object_object(self, entries):
+    def get_in_object(self, entry_key: str = None, entry_sources = None):
         """
-         * Reformat iterator from get_in() into object with access by key as string key and value with the whole entry
-         * @param iterator entries
+         * Reformat into object with access by key as string key and value with the whole entry
+         * @param string|None entry_key
+         * @param string[] entry_sources
          * @return Inputs.Input
          * Also usually came in pair with previous call - but with a different syntax
          * Beware - due any dict limitations there is a limitation that only the last entry prevails
          *
-         * entries_in_object = input.into_key_object_object(input.get_in('example', [Entries.IEntry.SOURCE_GET]));
+         * entries_in_object = variables.get_in_object('example', [Entries.IEntry.SOURCE_GET]);
         """
         raise NotImplementedError('TBA')

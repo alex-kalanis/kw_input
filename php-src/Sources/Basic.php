@@ -23,47 +23,47 @@ class Basic implements Interfaces\ISource
         return $this;
     }
 
-    public function &cli(): ?array
+    public function cli(): ?array
     {
         return $this->cliArgs;
     }
 
-    public function &get(): ?array
+    public function get(): ?array
     {
         return $_GET;
     }
 
-    public function &post(): ?array
+    public function post(): ?array
     {
         return $_POST;
     }
 
-    public function &files(): ?array
+    public function files(): ?array
     {
         return $_FILES;
     }
 
-    public function &cookie(): ?array
+    public function cookie(): ?array
     {
         return $_COOKIE;
     }
 
-    public function &session(): ?array
+    public function session(): ?array
     {
-        return $_SESSION;
+        return session_status() == PHP_SESSION_ACTIVE ? $_SESSION : [];
     }
 
-    public function &server(): ?array
+    public function server(): ?array
     {
         return $_SERVER;
     }
 
-    public function &env(): ?array
+    public function env(): ?array
     {
         return $_ENV;
     }
 
-    public function &external(): ?array
+    public function external(): ?array
     {
         return $this->externalArgs;
     }

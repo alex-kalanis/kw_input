@@ -3,7 +3,6 @@
 namespace kalanis\kw_input;
 
 
-use ArrayAccess;
 use Traversable;
 
 
@@ -55,7 +54,7 @@ class Inputs implements Interfaces\IInputs
         );
     }
 
-    protected function loadInput(string $source, ?array &$inputArray = null): array
+    protected function loadInput(string $source, ?array $inputArray = null): array
     {
         if (empty($inputArray)) {
             return [];
@@ -65,7 +64,7 @@ class Inputs implements Interfaces\IInputs
         return $loader->loadVars($source, $parser->parseInput($inputArray));
     }
 
-    public function getIn(string $entryKey = null, array $entrySources = []): Traversable
+    public function getIn(?string $entryKey = null, array $entrySources = []): Traversable
     {
         foreach ($this->entries as $entry) {
             $allowedByKey = empty($entryKey) || ($entry->getKey() == $entryKey);
@@ -74,28 +73,5 @@ class Inputs implements Interfaces\IInputs
                 yield $entry;
             }
         }
-    }
-
-    /**
-     * @param Traversable $entries
-     * @return Interfaces\IEntry[]
-     */
-    public function intoKeyObjectArray(Traversable $entries): array
-    {
-        $result = [];
-        foreach ($entries as $entry) {
-            /** @var Interfaces\IEntry $entry */
-            $result[$entry->getKey()] = $entry;
-        }
-        return $result;
-    }
-
-    /**
-     * @param Traversable $entries
-     * @return ArrayAccess
-     */
-    public function intoKeyObjectObject(Traversable $entries): ArrayAccess
-    {
-        return new Input($this->intoKeyObjectArray($entries));
     }
 }
