@@ -50,8 +50,12 @@ class Input implements ArrayAccess, IteratorAggregate, Countable
      */
     public final function offsetSet($offset, $value): void
     {
-        if ($value instanceof Interfaces\IEntry) {
-            $this->inputs[$offset] = $value;
+        if ($this->offsetExists($offset)) {
+            $entry = new Entry();
+            $entry->setEntry($this->offsetGet($offset)->getSource(), $offset, $value);
+            $this->inputs[$offset] = $entry;
+        } elseif ($value instanceof Interfaces\IEntry) {
+            $this->inputs[$value->getKey()] = $value;
         } else {
             $entry = new Entry();
             $entry->setEntry(Interfaces\IEntry::SOURCE_EXTERNAL, $offset, $value);

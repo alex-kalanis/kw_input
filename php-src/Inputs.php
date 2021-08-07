@@ -42,6 +42,7 @@ class Inputs implements Interfaces\IInputs
     public function loadEntries(): void
     {
         $this->entries = array_merge(
+            $this->loadInput(Interfaces\IEntry::SOURCE_EXTERNAL, $this->source->external()),
             $this->loadInput(Interfaces\IEntry::SOURCE_GET, $this->source->get()),
             $this->loadInput(Interfaces\IEntry::SOURCE_POST, $this->source->post()),
             $this->loadInput(Interfaces\IEntry::SOURCE_CLI, $this->source->cli()),
@@ -49,8 +50,7 @@ class Inputs implements Interfaces\IInputs
             $this->loadInput(Interfaces\IEntry::SOURCE_SESSION, $this->source->session()),
             $this->loadInput(Interfaces\IEntry::SOURCE_FILES, $this->source->files()),
             $this->loadInput(Interfaces\IEntry::SOURCE_ENV, $this->source->env()),
-            $this->loadInput(Interfaces\IEntry::SOURCE_SERVER, $this->source->server()),
-            $this->loadInput(Interfaces\IEntry::SOURCE_EXTERNAL, $this->source->external())
+            $this->loadInput(Interfaces\IEntry::SOURCE_SERVER, $this->source->server())
         );
     }
 

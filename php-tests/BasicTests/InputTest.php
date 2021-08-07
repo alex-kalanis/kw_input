@@ -148,6 +148,8 @@ class InputTest extends CommonTestClass
         $this->assertFalse(isset($entries['aff']));
         $entries[$entry->getKey()] = $entry;
         $this->assertTrue($entries->offsetExists('aff'));
+        $entries[$entry->getKey()] = 'tfc';
+        $this->assertEquals('tfc', $entries->offsetGet('aff')->getValue());
 
         $entry = $entries->baz;
         unset($entries->baz);
