@@ -1,6 +1,6 @@
 <?php
 
-namespace kalanis\kw_input\Extras;
+namespace kalanis\kw_input\Simplified;
 
 
 use ArrayAccess;
@@ -9,10 +9,12 @@ use ArrayAccess;
 /**
  * Class SessionAdapter
  * @package kalanis\kw_input\Extras
- * Connect session via ArrayAccess
+ * Accessing _SESSION via ArrayAccess
  */
 class SessionAdapter implements ArrayAccess
 {
+    use TNullBytes;
+
     public final function __get($offset)
     {
         return $this->offsetGet($offset);
@@ -51,10 +53,5 @@ class SessionAdapter implements ArrayAccess
     public final function offsetUnset($offset)
     {
         unset($_SESSION[$this->removeNullBytes($offset)]);
-    }
-
-    protected function removeNullBytes($string)
-    {
-        return str_replace(chr(0), '', $string);
     }
 }
