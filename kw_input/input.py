@@ -73,14 +73,14 @@ class Inputs(IInputs):
         if not isinstance(self._source, ISource):
             raise AttributeError('Unknown source for reading values. Please, set something!')
         self._entries = self._load_input(IEntry.SOURCE_GET, self._source.get()) \
+            + self._load_input(IEntry.SOURCE_EXTERNAL, self._source.external()) \
             + self._load_input(IEntry.SOURCE_POST, self._source.post()) \
             + self._load_input(IEntry.SOURCE_CLI, self._source.cli()) \
             + self._load_input(IEntry.SOURCE_COOKIE, self._source.cookie()) \
             + self._load_input(IEntry.SOURCE_SESSION, self._source.session()) \
             + self._load_input(IEntry.SOURCE_FILES, self._source.files()) \
             + self._load_input(IEntry.SOURCE_ENV, self._source.env()) \
-            + self._load_input(IEntry.SOURCE_SERVER, self._source.server()) \
-            + self._load_input(IEntry.SOURCE_EXTERNAL, self._source.external())
+            + self._load_input(IEntry.SOURCE_SERVER, self._source.server())
 
     def _load_input(self, source: str, input_array=None):
         if not input_array:
