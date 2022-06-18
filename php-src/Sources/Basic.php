@@ -56,7 +56,7 @@ class Basic implements Interfaces\ISource
 
     public function session(): ?array
     {
-        return session_status() == PHP_SESSION_ACTIVE ? $_SESSION : [];
+        return PHP_SESSION_ACTIVE == session_status() ? $_SESSION : [];
     }
 
     public function server(): ?array

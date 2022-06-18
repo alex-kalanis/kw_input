@@ -87,6 +87,6 @@ class CliEntry extends ALoader
 
     protected function getSize(string $path): int
     {
-        return (int)filesize($path);
+        return intval(filesize($path));
     }
 }
