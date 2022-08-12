@@ -198,30 +198,16 @@ class FilteredTest extends CommonTestClass
         $entries->offsetSet('uhb', 'feaht');
         $this->assertEquals('feaht', $entries->offsetGet('uhb')->getValue());
         $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('uhb')->getSource());
-
-        $entry = $entries->offsetGet('aff');
-        unset($entries['aff']);
-        $this->assertFalse(isset($entries['aff']));
-        $entries[$entry->getKey()] = $entry;
-        $this->assertTrue($entries->offsetExists('aff'));
-        $entries[$entry->getKey()] = 'tfc';
-        $this->assertEquals('tfc', $entries->offsetGet('aff')->getValue());
-
-        $entry = $entries->baz;
-        unset($entries->baz);
-        $this->assertTrue(empty($entries->baz));
-        $entries->{$entry->getKey()} = $entry;
-        $this->assertTrue(isset($entries->baz));
     }
 
-    public function testSimple()
+    public function testSimpleArray()
     {
         $variables = new Filtered\SimpleArrays([
             'foo' => 'val1',
             'bar' => ['bal1', 'bal2'],
             'baz' => true,
             'aff' => 42,
-        ]);
+        ], Interfaces\IEntry::SOURCE_POST);
 
         /** @var Input $entries */
         $entries = $variables->getInObject(null, [Interfaces\IEntry::SOURCE_GET]); // sources have no meaning here
@@ -231,41 +217,57 @@ class FilteredTest extends CommonTestClass
         $this->assertTrue(isset($entries['foo']));
         $this->assertEquals('foo', $entries['foo']->getKey());
         $this->assertEquals('val1', $entries['foo']->getValue());
-        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries['foo']->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_POST, $entries['foo']->getSource());
 
         $this->assertTrue($entries->offsetExists('bar'));
         $this->assertEquals('bar', $entries->offsetGet('bar')->getKey());
         $this->assertEquals(['bal1', 'bal2'], $entries->offsetGet('bar')->getValue());
-        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('bar')->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_POST, $entries->offsetGet('bar')->getSource());
 
         $this->assertTrue(isset($entries->baz));
         $this->assertEquals('baz', $entries->baz->getKey());
         $this->assertEquals(true, $entries->baz->getValue());
-        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->baz->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_POST, $entries->baz->getSource());
 
         $this->assertTrue($entries->offsetExists('aff'));
         $this->assertEquals('aff', $entries->offsetGet('aff')->getKey());
         $this->assertEquals(42, $entries->offsetGet('aff')->getValue());
-        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('aff')->getSource());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_POST, $entries->offsetGet('aff')->getSource());
+    }
 
-        $this->assertFalse($entries->offsetExists('uhb'));
-        $entries->offsetSet('uhb', 'feaht');
-        $this->assertEquals('feaht', $entries->offsetGet('uhb')->getValue());
-        $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('uhb')->getSource());
+    public function testArrayAccess()
+    {
+        $variables = new Filtered\ArrayAccessed(new ArrayObject([
+            'foo' => 'val1',
+            'bar' => ['bal1', 'bal2'],
+            'baz' => true,
+            'aff' => 42,
+        ]), Interfaces\IEntry::SOURCE_CLI);
 
-        $entry = $entries->offsetGet('aff');
-        unset($entries['aff']);
-        $this->assertFalse(isset($entries['aff']));
-        $entries[$entry->getKey()] = $entry;
-        $this->assertTrue($entries->offsetExists('aff'));
-        $entries[$entry->getKey()] = 'tfc';
-        $this->assertEquals('tfc', $entries->offsetGet('aff')->getValue());
+        /** @var Input $entries */
+        $entries = $variables->getInObject(null, [Interfaces\IEntry::SOURCE_GET]); // sources have no meaning here
+        $this->assertNotEmpty(iterator_to_array($entries->getIterator()));
+        $this->assertNotEmpty(count($entries));
 
-        $entry = $entries->baz;
-        unset($entries->baz);
-        $this->assertTrue(empty($entries->baz));
-        $entries->{$entry->getKey()} = $entry;
+        $this->assertTrue(isset($entries['foo']));
+        $this->assertEquals('foo', $entries['foo']->getKey());
+        $this->assertEquals('val1', $entries['foo']->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_CLI, $entries['foo']->getSource());
+
+        $this->assertTrue($entries->offsetExists('bar'));
+        $this->assertEquals('bar', $entries->offsetGet('bar')->getKey());
+        $this->assertEquals(['bal1', 'bal2'], $entries->offsetGet('bar')->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_CLI, $entries->offsetGet('bar')->getSource());
+
         $this->assertTrue(isset($entries->baz));
+        $this->assertEquals('baz', $entries->baz->getKey());
+        $this->assertEquals(true, $entries->baz->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_CLI, $entries->baz->getSource());
+
+        $this->assertTrue($entries->offsetExists('aff'));
+        $this->assertEquals('aff', $entries->offsetGet('aff')->getKey());
+        $this->assertEquals(42, $entries->offsetGet('aff')->getValue());
+        $this->assertEquals(Interfaces\IEntry::SOURCE_CLI, $entries->offsetGet('aff')->getSource());
     }
 }
 

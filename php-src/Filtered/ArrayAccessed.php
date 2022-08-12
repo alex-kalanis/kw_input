@@ -14,18 +14,18 @@ use kalanis\kw_input\Interfaces;
  * @package kalanis\kw_input\Filtered
  * Helping class for passing info from simple arrays into objects
  */
-class SimpleArrays implements Interfaces\IFiltered
+class ArrayAccessed implements Interfaces\IFiltered
 {
-    /** @var array<int|string, string|int|float|bool|null> */
-    protected $inputs = [];
+    /** @var ArrayAccess */
+    protected $inputs = null;
     /** @var string */
     protected $source = '';
 
     /**
-     * @param array<int|string, string|int|float|bool|null> $inputs
+     * @param ArrayAccess $inputs
      * @param string $source
      */
-    public function __construct(array $inputs, string $source = Interfaces\IEntry::SOURCE_EXTERNAL)
+    public function __construct(ArrayAccess $inputs, string $source = Interfaces\IEntry::SOURCE_EXTERNAL)
     {
         $this->inputs = $inputs;
         $this->source = $source;
