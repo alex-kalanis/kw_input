@@ -250,6 +250,9 @@ class MockSource(ISource):
     def external(self):
         return None
 
+    def inputRawPaths(self):
+        return None
+
 
 class MockInputs(Inputs):
 

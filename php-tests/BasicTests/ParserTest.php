@@ -13,15 +13,18 @@ class ParserTest extends CommonTestClass
         $loader2 = $factory->getLoader(IEntry::SOURCE_GET); // intentionally same
         $loader3 = $factory->getLoader(IEntry::SOURCE_CLI);
         $loader4 = $factory->getLoader(IEntry::SOURCE_FILES);
+        $loader5 = $factory->getLoader(IEntry::SOURCE_JSON);
 
         $this->assertInstanceOf('\kalanis\kw_input\Parsers\Basic', $loader1);
         $this->assertInstanceOf('\kalanis\kw_input\Parsers\Basic', $loader2);
         $this->assertInstanceOf('\kalanis\kw_input\Parsers\Files', $loader4);
         $this->assertInstanceOf('\kalanis\kw_input\Parsers\Cli', $loader3);
+        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Json', $loader5);
         $this->assertEquals($loader1, $loader2);
         $this->assertNotEquals($loader3, $loader2);
         $this->assertNotEquals($loader3, $loader4);
         $this->assertNotEquals($loader2, $loader4);
+        $this->assertNotEquals($loader2, $loader5);
     }
 
     public function testBasic()

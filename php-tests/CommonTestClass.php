@@ -120,4 +120,19 @@ class CommonTestClass extends TestCase
             '-a-*c',
         ];
     }
+
+    protected function jsonDataset(): string
+    {
+        return '{"foo": "bar", "baz": {"rfv": 123, "edc": 456}, "sbr": ["cde", "dgs"]}';
+    }
+
+    protected function jsonStringDataset(): string
+    {
+        return '"Just content"';
+    }
+
+    protected function jsonFileDataset(): string
+    {
+        return '{"foo": {"rfv": 123, "FILE": "This won\u0000t be changed"}, "bar": {"ijn": {"FILE": "This will be cha\u0000nged"}}}';
+    }
 }

@@ -3,13 +3,14 @@
 use kalanis\kw_input\Entries;
 use kalanis\kw_input\Filtered;
 use kalanis\kw_input\Input;
+use kalanis\kw_input\InputException;
 use kalanis\kw_input\Inputs;
 use kalanis\kw_input\Interfaces;
 
 
 class FilteredTest extends CommonTestClass
 {
-    public function testBasics()
+    public function testBasics(): void
     {
         $input = new MockInputs();
         $input->setSource($this->cliDataset()); // direct cli
@@ -59,7 +60,7 @@ class FilteredTest extends CommonTestClass
         $this->assertEquals(Interfaces\IEntry::SOURCE_GET, $entry->getSource());
     }
 
-    public function testFiles()
+    public function testFiles(): void
     {
         $source = new MockSource();
         $source->setRemotes($this->entryDataset(), null, null, $this->fileDataset());
@@ -102,7 +103,7 @@ class FilteredTest extends CommonTestClass
         $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $entry->getSource());
     }
 
-    public function testObject()
+    public function testObject(): void
     {
         $input = new MockInputs();
         $input->setSource($this->cliDataset()); // direct cli
@@ -159,7 +160,7 @@ class FilteredTest extends CommonTestClass
         $this->assertTrue(isset($entries->baz));
     }
 
-    public function testEntries()
+    public function testEntries(): void
     {
         $variables = new Filtered\EntryArrays([
             ExEntry::init(Interfaces\IEntry::SOURCE_GET, 'foo', 'val1'),
@@ -200,7 +201,7 @@ class FilteredTest extends CommonTestClass
         $this->assertEquals(Interfaces\IEntry::SOURCE_EXTERNAL, $entries->offsetGet('uhb')->getSource());
     }
 
-    public function testSimpleArray()
+    public function testSimpleArray(): void
     {
         $variables = new Filtered\SimpleArrays([
             'foo' => 'val1',
@@ -235,7 +236,7 @@ class FilteredTest extends CommonTestClass
         $this->assertEquals(Interfaces\IEntry::SOURCE_POST, $entries->offsetGet('aff')->getSource());
     }
 
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $variables = new Filtered\ArrayAccessed(new ArrayObject([
             'foo' => 'val1',
@@ -268,6 +269,44 @@ class FilteredTest extends CommonTestClass
         $this->assertEquals('aff', $entries->offsetGet('aff')->getKey());
         $this->assertEquals(42, $entries->offsetGet('aff')->getValue());
         $this->assertEquals(Interfaces\IEntry::SOURCE_CLI, $entries->offsetGet('aff')->getSource());
+    }
+
+    /**
+     * @throws InputException
+     */
+    public function testJson(): void
+    {
+        $variables = new Filtered\Json($this->jsonDataset());
+
+        /** @var Input $entries */
+        $entries = $variables->getInObject(); // sources have no meaning here
+        $this->assertNotEmpty(iterator_to_array($entries->getIterator()));
+        $this->assertNotEmpty(count($entries));
+
+        $entries = $variables->getInArray(); // sources have no meaning here
+        $entry = reset($entries);
+        $this->assertEquals(Interfaces\IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('foo', $entry->getKey());
+        $this->assertEquals('bar', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(Interfaces\IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('baz', $entry->getKey());
+        $this->assertEquals(['rfv' => 123, 'edc'=> 456], $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(Interfaces\IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('sbr', $entry->getKey());
+        $this->assertEquals(['cde', 'dgs'], $entry->getValue());
+    }
+
+    /**
+     * @throws InputException
+     */
+    public function testJsonCrash(): void
+    {
+        $this->expectException(InputException::class);
+        new Filtered\Json('not a Json string\0{');
     }
 }
 
@@ -338,6 +377,11 @@ class MockSource implements Interfaces\ISource
     {
         $content = null;
         return $content;
+    }
+
+    public function inputRawPaths(): ?array
+    {
+        return [];
     }
 }
 

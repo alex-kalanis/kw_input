@@ -7,27 +7,39 @@ use kalanis\kw_input\Parsers;
 
 class LoaderTest extends CommonTestClass
 {
-    public function testFactory()
+    protected $tempFile = '';
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        if (is_file($this->tempFile)) {
+            @unlink($this->tempFile);
+        }
+    }
+
+    public function testFactory(): void
     {
         $factory = new Loaders\Factory();
         $loader1 = $factory->getLoader(IEntry::SOURCE_GET);
         $loader2 = $factory->getLoader(IEntry::SOURCE_GET); // intentionally same
         $loader3 = $factory->getLoader(IEntry::SOURCE_FILES);
+        $loader4 = $factory->getLoader(IEntry::SOURCE_JSON);
 
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\Entry', $loader1);
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\Entry', $loader2);
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\File', $loader3);
+        $this->assertInstanceOf('\kalanis\kw_input\Loaders\Json', $loader4);
         $this->assertEquals($loader1, $loader2);
         $this->assertNotEquals($loader3, $loader2);
+        $this->assertNotEquals($loader3, $loader4);
     }
 
-    public function testEntry()
+    public function testEntry(): void
     {
         $data = new Loaders\Entry();
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
 
-        $dataset = $this->entryDataset();
-        $entries = $data->loadVars(IEntry::SOURCE_GET, $dataset);
+        $entries = $data->loadVars(IEntry::SOURCE_GET, $this->entryDataset());
 
         $entry = reset($entries);
         $this->assertEquals(IEntry::SOURCE_GET, $entry->getSource());
@@ -50,13 +62,12 @@ class LoaderTest extends CommonTestClass
         $this->assertEquals(42, $entry->getValue());
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $data = new Loaders\File();
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
 
-        $dataset = $this->fileDataset();
-        $entries = $data->loadVars(IEntry::SOURCE_FILES, $dataset);
+        $entries = $data->loadVars(IEntry::SOURCE_FILES, $this->fileDataset());
 
         $entry = reset($entries);
         $this->assertEquals(IEntry::SOURCE_FILES, $entry->getSource());
@@ -86,14 +97,13 @@ class LoaderTest extends CommonTestClass
         $this->assertEquals(3075, $entry->getSize());
     }
 
-    public function testCliFile()
+    public function testCliFile(): void
     {
         $data = new Loaders\CliEntry();
         $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
 
         $cli = new Parsers\Cli();
-        $dataset = $this->cliDataset();
-        $entries = $data->loadVars(IEntry::SOURCE_CLI, $cli->parseInput($dataset));
+        $entries = $data->loadVars(IEntry::SOURCE_CLI, $cli->parseInput($this->cliDataset()));
 
         $entry = reset($entries);
         $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
@@ -129,5 +139,132 @@ class LoaderTest extends CommonTestClass
         $this->assertEquals(IEntry::SOURCE_CLI, $entry->getSource());
         $this->assertEquals('file3', $entry->getKey());
         $this->assertEquals('./data/testing.2.txt', $entry->getValue());
+    }
+
+    public function testJson(): void
+    {
+        $parser = new Parsers\Json();
+        $loader = new Loaders\Json();
+
+        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+
+        $this->setTempData($this->jsonDataset());
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([$this->tempFile]));
+
+        $entry = reset($entries);
+        $this->assertEquals(IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('foo', $entry->getKey());
+        $this->assertEquals('bar', $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('baz', $entry->getKey());
+        $this->assertEquals(['rfv' => 123, 'edc'=> 456], $entry->getValue());
+
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('sbr', $entry->getKey());
+        $this->assertEquals(['cde', 'dgs'], $entry->getValue());
+    }
+
+    public function testJsonString(): void
+    {
+        $parser = new Parsers\Json();
+        $loader = new Loaders\Json();
+
+        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+
+        $this->setTempData($this->jsonStringDataset());
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([$this->tempFile]));
+
+        $entry = reset($entries);
+        $this->assertEquals(IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals(0, $entry->getKey());
+        $this->assertEquals('Just content', $entry->getValue());
+    }
+
+    public function testJsonFile(): void
+    {
+        $loader = new Loaders\Json();
+        $parser = new Parsers\Json();
+
+        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+
+        $this->setTempData($this->jsonFileDataset());
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([$this->tempFile]));
+
+        /** @var \kalanis\kw_input\Entries\FileEntry $entry */
+        $entry = reset($entries);
+        $this->assertEquals(IEntry::SOURCE_FILES, $entry->getSource());
+        $this->assertEquals('foo', $entry->getKey());
+        $this->assertEquals('foo.json', $entry->getValue());
+
+        // now file content
+        $this->assertNotEmpty($entry->getTempName());
+        $this->assertEquals('application/octet-stream', $entry->getMimeType());
+        $this->assertEquals(21, $entry->getSize());
+        $this->assertEquals('This won' . chr(0) . 't be changed', file_get_contents($entry->getTempName()));
+        @unlink($entry->getTempName());
+
+        // second record is not a file
+        $entry = next($entries);
+        $this->assertEquals(IEntry::SOURCE_JSON, $entry->getSource());
+        $this->assertEquals('bar', $entry->getKey());
+        $this->assertEquals(['ijn' => ['FILE' => 'This will be changed']], $entry->getValue());
+    }
+
+    public function testJsonNothing(): void
+    {
+        $loader = new Loaders\Json();
+        $parser = new Parsers\Json();
+
+        $this->setTempData('{}');
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([$this->tempFile]));
+
+        $this->assertEmpty($entries);
+    }
+
+    public function testJsonBadToDecode(): void
+    {
+        $loader = new Loaders\Json();
+        $parser = new Parsers\Json();
+
+        $this->setTempData('This is not a valid JSON string {\0');
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([$this->tempFile]));
+
+        $this->assertEmpty($entries);
+    }
+
+    public function testJsonNoToDecode(): void
+    {
+        $loader = new Loaders\Json();
+        $parser = new Parsers\Json();
+
+        $this->setTempData('This is not a valid JSON string {\0');
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput([]));
+
+        $this->assertEmpty($entries);
+    }
+
+    public function testJsonNoFile(): void
+    {
+        $loader = new Loaders\Json();
+        $parser = new Parsers\Json();
+
+        $entries = $loader->loadVars(IEntry::SOURCE_JSON, $parser->parseInput(['not_exists']));
+
+        $this->assertEmpty($entries);
+    }
+
+    protected function setTempData(string $dataset): void
+    {
+        $this->tempFile = tempnam(sys_get_temp_dir(), 'js_test_');
+        file_put_contents($this->tempFile, $dataset);
     }
 }

@@ -13,6 +13,9 @@ class IEntry:
     SOURCE_SERVER = 'server'
     SOURCE_ENV = 'environment'
     SOURCE_EXTERNAL = 'external'
+    SOURCE_JSON = 'json'
+    SOURCE_XML = 'xml'
+    SOURCE_RAW = 'raw'
 
     def get_source(self) -> str:
         """
@@ -98,6 +101,9 @@ class ISource:
         raise NotImplementedError('TBA')
 
     def external(self):
+        raise NotImplementedError('TBA')
+
+    def inputRawPaths(self):
         raise NotImplementedError('TBA')
 
 

@@ -19,6 +19,7 @@ class Entry(IEntry):
         IEntry.SOURCE_SERVER,
         IEntry.SOURCE_ENV,
         IEntry.SOURCE_EXTERNAL,
+        IEntry.SOURCE_JSON,
     ]
 
     def __init__(self):
