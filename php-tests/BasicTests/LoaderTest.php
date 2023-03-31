@@ -25,10 +25,10 @@ class LoaderTest extends CommonTestClass
         $loader3 = $factory->getLoader(IEntry::SOURCE_FILES);
         $loader4 = $factory->getLoader(IEntry::SOURCE_JSON);
 
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\Entry', $loader1);
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\Entry', $loader2);
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\File', $loader3);
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\Json', $loader4);
+        $this->assertInstanceOf(Loaders\Entry::class, $loader1);
+        $this->assertInstanceOf(Loaders\Entry::class, $loader2);
+        $this->assertInstanceOf(Loaders\File::class, $loader3);
+        $this->assertInstanceOf(Loaders\Json::class, $loader4);
         $this->assertEquals($loader1, $loader2);
         $this->assertNotEquals($loader3, $loader2);
         $this->assertNotEquals($loader3, $loader4);
@@ -37,7 +37,7 @@ class LoaderTest extends CommonTestClass
     public function testEntry(): void
     {
         $data = new Loaders\Entry();
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
+        $this->assertInstanceOf(Loaders\ALoader::class, $data);
 
         $entries = $data->loadVars(IEntry::SOURCE_GET, $this->entryDataset());
 
@@ -65,7 +65,7 @@ class LoaderTest extends CommonTestClass
     public function testFile(): void
     {
         $data = new Loaders\File();
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
+        $this->assertInstanceOf(Loaders\ALoader::class, $data);
 
         $entries = $data->loadVars(IEntry::SOURCE_FILES, $this->fileDataset());
 
@@ -100,7 +100,7 @@ class LoaderTest extends CommonTestClass
     public function testCliFile(): void
     {
         $data = new Loaders\CliEntry();
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $data);
+        $this->assertInstanceOf(Loaders\ALoader::class, $data);
 
         $cli = new Parsers\Cli();
         $entries = $data->loadVars(IEntry::SOURCE_CLI, $cli->parseInput($this->cliDataset()));
@@ -146,7 +146,7 @@ class LoaderTest extends CommonTestClass
         $parser = new Parsers\Json();
         $loader = new Loaders\Json();
 
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+        $this->assertInstanceOf(Loaders\ALoader::class, $loader);
 
         $this->setTempData($this->jsonDataset());
 
@@ -173,7 +173,7 @@ class LoaderTest extends CommonTestClass
         $parser = new Parsers\Json();
         $loader = new Loaders\Json();
 
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+        $this->assertInstanceOf(Loaders\ALoader::class, $loader);
 
         $this->setTempData($this->jsonStringDataset());
 
@@ -190,7 +190,7 @@ class LoaderTest extends CommonTestClass
         $loader = new Loaders\Json();
         $parser = new Parsers\Json();
 
-        $this->assertInstanceOf('\kalanis\kw_input\Loaders\ALoader', $loader);
+        $this->assertInstanceOf(Loaders\ALoader::class, $loader);
 
         $this->setTempData($this->jsonFileDataset());
 

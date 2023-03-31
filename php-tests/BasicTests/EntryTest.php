@@ -9,7 +9,7 @@ class EntryTest extends CommonTestClass
     public function testEntry()
     {
         $data = new Entries\Entry();
-        $this->assertInstanceOf('\kalanis\kw_input\Interfaces\IEntry', $data);
+        $this->assertInstanceOf(Interfaces\IEntry::class, $data);
 
         $this->assertEmpty($data->getSource());
         $this->assertEmpty($data->getKey());
@@ -34,8 +34,8 @@ class EntryTest extends CommonTestClass
     public function testFile()
     {
         $data = new Entries\FileEntry();
-        $this->assertInstanceOf('\kalanis\kw_input\Interfaces\IEntry', $data);
-        $this->assertInstanceOf('\kalanis\kw_input\Interfaces\IFileEntry', $data);
+        $this->assertInstanceOf(Interfaces\IEntry::class, $data);
+        $this->assertInstanceOf(Interfaces\IFileEntry::class, $data);
 
         $this->assertEquals(Interfaces\IEntry::SOURCE_FILES, $data->getSource());
         $this->assertEmpty($data->getKey());

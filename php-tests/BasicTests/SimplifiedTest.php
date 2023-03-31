@@ -1,5 +1,6 @@
 <?php
 
+use kalanis\kw_input\InputException;
 use kalanis\kw_input\Simplified;
 
 
@@ -9,7 +10,7 @@ class SimplifiedTest extends CommonTestClass
     {
         Simplified\CookieAdapter::init('', '', null, false, false, false);
         $data = new Simplified\CookieAdapter();
-        $this->assertInstanceOf('\ArrayAccess', $data);
+        $this->assertInstanceOf(\ArrayAccess::class, $data);
 
         $data->foz = 'wuz';
         $this->assertTrue(isset($data->foz));
@@ -34,7 +35,7 @@ class SimplifiedTest extends CommonTestClass
     {
         Simplified\CookieAdapter::init('', '', null, false, false, false, true);
         $data = new Simplified\CookieAdapter();
-        $this->expectException(\kalanis\kw_input\InputException::class);
+        $this->expectException(InputException::class);
         $data->foz = 'wuz';
     }
 
@@ -42,14 +43,14 @@ class SimplifiedTest extends CommonTestClass
     {
         Simplified\CookieAdapter::init('', '', null, false, false, false, true);
         $data = new Simplified\CookieAdapter();
-        $this->expectException(\kalanis\kw_input\InputException::class);
+        $this->expectException(InputException::class);
         unset($data->foz);
     }
 
     public function testSession()
     {
         $data = new Simplified\SessionAdapter();
-        $this->assertInstanceOf('\ArrayAccess', $data);
+        $this->assertInstanceOf(\ArrayAccess::class, $data);
 
         $data->foz = 'wuz';
         $this->assertTrue(isset($data->foz));
@@ -73,7 +74,7 @@ class SimplifiedTest extends CommonTestClass
     public function testServer()
     {
         $data = new Simplified\ServerAdapter();
-        $this->assertInstanceOf('\ArrayAccess', $data);
+        $this->assertInstanceOf(\ArrayAccess::class, $data);
         $this->assertTrue(isset($data->PHP_SELF));
         $this->assertTrue(isset($data['PHP_SELF']));
         $data->PHP_SELF;
@@ -83,14 +84,14 @@ class SimplifiedTest extends CommonTestClass
     public function testServerDie1()
     {
         $data = new Simplified\ServerAdapter();
-        $this->expectException(\kalanis\kw_input\InputException::class);
+        $this->expectException(InputException::class);
         $data->foz = 'wuz';
     }
 
     public function testServerDie2()
     {
         $data = new Simplified\ServerAdapter();
-        $this->expectException(\kalanis\kw_input\InputException::class);
+        $this->expectException(InputException::class);
         unset($data->foz);
     }
 }

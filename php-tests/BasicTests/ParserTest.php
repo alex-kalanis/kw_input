@@ -15,11 +15,11 @@ class ParserTest extends CommonTestClass
         $loader4 = $factory->getLoader(IEntry::SOURCE_FILES);
         $loader5 = $factory->getLoader(IEntry::SOURCE_JSON);
 
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Basic', $loader1);
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Basic', $loader2);
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Files', $loader4);
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Cli', $loader3);
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\Json', $loader5);
+        $this->assertInstanceOf(Parsers\Basic::class, $loader1);
+        $this->assertInstanceOf(Parsers\Basic::class, $loader2);
+        $this->assertInstanceOf(Parsers\Files::class, $loader4);
+        $this->assertInstanceOf(Parsers\Cli::class, $loader3);
+        $this->assertInstanceOf(Parsers\Json::class, $loader5);
         $this->assertEquals($loader1, $loader2);
         $this->assertNotEquals($loader3, $loader2);
         $this->assertNotEquals($loader3, $loader4);
@@ -30,7 +30,7 @@ class ParserTest extends CommonTestClass
     public function testBasic()
     {
         $data = new Parsers\Basic();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->entryDataset();
         $entries = $data->parseInput($dataset);
@@ -55,7 +55,7 @@ class ParserTest extends CommonTestClass
     public function testStrange()
     {
         $data = new Parsers\Basic();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->strangeEntryDataset();
         $entries = $data->parseInput($dataset);
@@ -80,7 +80,7 @@ class ParserTest extends CommonTestClass
     public function testFile()
     {
         $data = new Parsers\Files();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->fileDataset();
         $entries = $data->parseInput($dataset);
@@ -91,7 +91,7 @@ class ParserTest extends CommonTestClass
     public function testStrangeFile()
     {
         $data = new Parsers\Files();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->strangeFileDataset();
         $entries = $data->parseInput($dataset);
@@ -117,7 +117,7 @@ class ParserTest extends CommonTestClass
     public function testCli()
     {
         $data = new Parsers\Cli();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->cliDataset();
         $entries = $data->parseInput($dataset);
@@ -158,7 +158,7 @@ class ParserTest extends CommonTestClass
     public function testStrangeCli()
     {
         $data = new Parsers\Cli();
-        $this->assertInstanceOf('\kalanis\kw_input\Parsers\AParser', $data);
+        $this->assertInstanceOf(Parsers\AParser::class, $data);
 
         $dataset = $this->strangeCliDataset();
         $entries = $data->parseInput($dataset);
