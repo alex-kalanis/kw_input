@@ -103,7 +103,7 @@ class ISource:
     def external(self):
         raise NotImplementedError('TBA')
 
-    def inputRawPaths(self):
+    def input_raw_paths(self):
         raise NotImplementedError('TBA')
 
 
@@ -115,6 +115,15 @@ class IInputs:
     def set_source(self, source=None):
         """
          * Setting the variable sources - from cli (argv), _GET, _POST, _SERVER, ...
+
+        Parameters
+        ----------
+        source: list[str]|list[int]|dict[str]|dict[int]|tuple[str]|tuple[int]|ISource|None
+
+        Returns
+        -------
+        IInputs
+
         """
         raise NotImplementedError('TBA')
 
@@ -127,12 +136,20 @@ class IInputs:
         """
         raise NotImplementedError('TBA')
 
-    def get_in(self, entry_key: str = None, entry_sources = None):
+    def get_in(self, entry_key: str = None, entry_sources=None):
         """
          * Get iterator of local entries, filter them on way
-         * @param string|null $entry_key
-         * @param string[] $entry_sources array of constants from Entries.IEntry.SOURCE_*
-         * @return iterator
+
+        Parameters
+        ----------
+        entry_key: str|None
+        entry_sources: list[str]|dict[str]|tuple[str]|None
+            array of constants from Entries.IEntry.SOURCE_*
+
+        Yields
+        -------
+        IFilterEntry
+
          * @see Entries.IEntry.SOURCE_CLI
          * @see Entries.IEntry.SOURCE_GET
          * @see Entries.IEntry.SOURCE_POST
@@ -150,29 +167,43 @@ class IFiltered:
      * Helper interface which allows us access variables from input
     """
 
-    def get_in_array(self, entry_key: str = None, entry_sources = None):
+    def get_in_array(self, entry_key: str = None, entry_sources=None):
         """
          * Reformat into array with key as array key and value with the whole entry
-         * @param string|None entry_key
-         * @param string[] entry_sources
-         * @return Entries.IEntry[]
          * Also usually came in pair with previous call - but with a different syntax
          * Beware - due any dict limitations there is a limitation that only the last entry prevails
          *
          * entries = variables.get_in_array('example', [Entries.IEntry.SOURCE_GET]);
+
+        Parameters
+        ----------
+        entry_key: str|None
+        entry_sources: list[str]|dict[str]|tuple[str]|None
+
+        Returns
+        -------
+        dict[IEntry]
+
         """
         raise NotImplementedError('TBA')
 
-    def get_in_object(self, entry_key: str = None, entry_sources = None):
+    def get_in_object(self, entry_key: str = None, entry_sources=None):
         """
          * Reformat into object with access by key as string key and value with the whole entry
-         * @param string|None entry_key
-         * @param string[] entry_sources
-         * @return Inputs.Input
          * Also usually came in pair with previous call - but with a different syntax
          * Beware - due any dict limitations there is a limitation that only the last entry prevails
          *
          * entries_in_object = variables.get_in_object('example', [Entries.IEntry.SOURCE_GET]);
+
+        Parameters
+        ----------
+        entry_key: str|None
+        entry_sources: list[str]|dict[str]|tuple[str]|None
+
+        Returns
+        -------
+        Input
+
         """
         raise NotImplementedError('TBA')
 

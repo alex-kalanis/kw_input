@@ -4,4 +4,4 @@
  * Usually each pythonic framework make complete own server
 """
 
- #  probably use library "argparse" for loading arguments from CLI
+#  probably use library "argparse" for loading arguments from CLI

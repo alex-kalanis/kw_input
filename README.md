@@ -19,7 +19,7 @@ This is the mixed package - contains sever-side implementation in Python and PHP
 ```
 {
     "require": {
-        "alex-kalanis/kw_input": "2.3"
+        "alex-kalanis/kw_input": "2.4"
     }
 }
 ```

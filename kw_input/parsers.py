@@ -10,15 +10,34 @@ class AParser:
     def parse_input(self, array):
         """
          * Parse input into usable array, remove problematic things
+
+        Parameters
+        ----------
+        array: bool|int|float|str|list[str, str]|dict[str, str]|tuple[str, str]|list[int, list[str, str]]|dict[int, dict[str, str]]|tuple[int, tuple[str, str]]
+
+        Returns
+        -------
+        bool|int|float|str|list[str|bool|int|float|list[str|bool|int|float]]
+
         """
         raise NotImplementedError('TBA')
 
-    """
-     * Clear Null bytes
-     * Do not use on files - they are usually valid
-     * @link https://resources.infosecinstitute.com/null-byte-injection-php/
-    """
-    def _remove_null_bytes(self, string: str, null_to = ''):
+    def _remove_null_bytes(self, string: str, null_to: str = ''):
+        """
+         * Clear Null bytes
+         * Do not use on files - they are usually valid
+         * @link https://resources.infosecinstitute.com/null-byte-injection-php/
+
+        Parameters
+        ----------
+        string: str
+        null_to: str
+
+        Returns
+        -------
+        str
+
+        """
         return string.replace(chr(0), null_to)
 
 
@@ -65,7 +84,16 @@ class Cli(AParser):
 
     def parse_input(self, array):
         """
-         * @param array $array is $argv in boot time
+
+        Parameters
+        ----------
+        array: list[str]
+            is $argv in boot time
+
+        Returns
+        -------
+        bool|int|float|str|list[str|bool|int|float|list[str|bool|int|float]]
+
         """
         clear_array = []
         unsorted = 0

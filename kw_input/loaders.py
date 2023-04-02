@@ -11,7 +11,16 @@ class ALoader:
     def load_vars(self, source: str, array):
         """
          * Transform input values to something more reliable
-         * @return Entry[]
+
+        Parameters
+        ----------
+        source: str
+        array: tuple[str|int, str]
+
+        Returns
+        -------
+        EntryItem
+
         """
         raise NotImplementedError('TBA')
 
@@ -24,7 +33,16 @@ class Entry(ALoader):
     def load_vars(self, source: str, array):
         """
          * Transform input values to something more reliable
-         * @return Entry[]
+
+        Parameters
+        ----------
+        source: str
+        array: tuple[str|int, str]
+
+        Returns
+        -------
+        list[EntryItem]
+
         """
         result = []
         for (key, val) in array:
@@ -86,7 +104,16 @@ class CliEntry(ALoader):
     def load_vars(self, source: str, array):
         """
          * Transform input values to something more reliable
-         * @return EntryItem[]|FileEntryItem[]
+
+        Parameters
+        ----------
+        source: str
+        array: tuple[str|int, str]
+
+        Returns
+        -------
+        list[EntryItem]|list[FileEntryItem]
+
         """
         result = []
         for (key, val) in array:
@@ -100,7 +127,7 @@ class CliEntry(ALoader):
 
         return result
 
-    def _check_file(self, path) -> str:
+    def _check_file(self, path) -> str or None:
         import os
 
         if not isinstance(path, str):

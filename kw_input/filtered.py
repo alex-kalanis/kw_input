@@ -12,10 +12,10 @@ class Variables(IFiltered):
     def __init__(self, inputs: IInputs):
         self._inputs = inputs
 
-    def get_in_object(self, entry_key: str = None, entry_sources = None):
+    def get_in_object(self, entry_key: str = None, entry_sources=None):
         return Input(self.get_in_array(entry_key, entry_sources))
 
-    def get_in_array(self, entry_key: str = None, entry_sources = None):
+    def get_in_array(self, entry_key: str = None, entry_sources=None):
         return self._into_key_object_array(self._inputs.get_in(entry_key, entry_sources))
 
     def _into_key_object_array(self, entries):
@@ -34,10 +34,10 @@ class SimpleArrays(IFiltered):
         self._inputs = inputs
         self._source = source
 
-    def get_in_object(self, entry_key: str = None, entry_sources = None):
+    def get_in_object(self, entry_key: str = None, entry_sources=None):
         return Input(self.get_in_array(entry_key, entry_sources))
 
-    def get_in_array(self, entry_key: str = None, entry_sources = None):
+    def get_in_array(self, entry_key: str = None, entry_sources=None):
         result = []
         for key in self._inputs:
             if (entry_key is None) or (key == entry_key):
@@ -55,10 +55,10 @@ class EntryArrays(IFiltered):
     def __init__(self, inputs: list):
         self._inputs = inputs
 
-    def get_in_object(self, entry_key: str = None, entry_sources = None):
+    def get_in_object(self, entry_key: str = None, entry_sources=None):
         return Input(self.get_in_array(entry_key, entry_sources))
 
-    def get_in_array(self, entry_key: str = None, entry_sources = None):
+    def get_in_array(self, entry_key: str = None, entry_sources=None):
         result = []
         for entry in self._inputs:
             pass_source = pass_key = False

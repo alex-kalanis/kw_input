@@ -89,7 +89,7 @@ class Inputs(IInputs):
         loader = self._loader_factory.get_loader(source)
         return loader.load_vars(source, parser.parse_input(input_array))
 
-    def get_in(self, entry_key: str = None, entry_sources = None):
+    def get_in(self, entry_key: str = None, entry_sources=None):
         for entry in self._entries:
             allowed_by_key = (not entry_key) or (entry.get_key() == entry_key)
             allowed_by_source = (not entry_sources) or (entry.get_source() in entry_sources)

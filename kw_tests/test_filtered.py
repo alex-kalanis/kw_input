@@ -250,7 +250,7 @@ class MockSource(ISource):
     def external(self):
         return None
 
-    def inputRawPaths(self):
+    def input_raw_paths(self):
         return None
 
 
