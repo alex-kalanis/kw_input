@@ -5,18 +5,18 @@ parameters:
 	scanFiles:
 		- 'php-src/Loaders/File.php' # $_FILES is "problematic"
 		- 'php-src/Parsers/Files.php' # $_FILES is "problematic"
-		- 'php-tests/CommonTestClass.php'
+#		- 'php-tests/CommonTestClass.php'
 	excludePaths:
 		- 'php-src/Loaders/File.php' # $_FILES is "problematic"
 		- 'php-src/Parsers/Files.php' # $_FILES is "problematic"
 		- 'php-tests/_autoload.php'
 		- 'php-tests/_bootstrap.php'
-		- 'php-tests/CommonTestClass.php'
+#		- 'php-tests/CommonTestClass.php'
 	bootstrapFiles:
 		- 'php-tests/_autoload.php'
-	checkGenericClassInNonGenericObjectType: false
+#	checkGenericClassInNonGenericObjectType: false
 	ignoreErrors:
 		# solved by unit tests
-		- '#Argument of an invalid type ArrayAccess supplied for foreach, only iterables are supported.#'
+#		- '#Argument of an invalid type ArrayAccess supplied for foreach, only iterables are supported.#'
 		# strval function
 		- '#Parameter \#1 \$va[rl]u?e? of function [si][tn][rt]val expects#'

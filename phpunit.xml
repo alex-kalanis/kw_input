@@ -55,6 +55,11 @@
     <testsuites>
         <testsuite name="ALL">
             <directory>php-tests/BasicTests</directory>
+            <directory>php-tests/FilteredTests</directory>
+            <directory>php-tests/LoadersTests</directory>
+            <directory>php-tests/ParsersTests</directory>
+            <directory>php-tests/SimplifiedTests</directory>
+            <directory>php-tests/TraitsTests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

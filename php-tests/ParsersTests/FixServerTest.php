@@ -1,9 +1,13 @@
 <?php
 
+namespace ParserTests;
+
+
+use CommonTestClass;
 use kalanis\kw_input\Parsers;
 
 
-class FixTest extends CommonTestClass
+class FixServerTest extends CommonTestClass
 {
     /**
      * @param array<string, string> $vars

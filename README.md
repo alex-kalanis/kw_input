@@ -1,10 +1,10 @@
 kw_input
 ================
 
-[![Build Status](https://app.travis-ci.com/alex-kalanis/kw_input.svg?branch=master)](https://app.travis-ci.com/github/alex-kalanis/kw_input)
+![Build Status](https://github.com/alex-kalanis/kw_input/actions/workflows/code_checks.yml/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alex-kalanis/kw_input/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alex-kalanis/kw_input/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/alex-kalanis/kw_input/v/stable.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_input)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.3-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
 [![Downloads](https://img.shields.io/packagist/dt/alex-kalanis/kw_input.svg?v1)](https://packagist.org/packages/alex-kalanis/kw_input)
 [![License](https://poser.pugx.org/alex-kalanis/kw_input/license.svg?v=1)](https://packagist.org/packages/alex-kalanis/kw_input)
 [![Code Coverage](https://scrutinizer-ci.com/g/alex-kalanis/kw_input/badges/coverage.png?b=master&v=1)](https://scrutinizer-ci.com/g/alex-kalanis/kw_input/?branch=master)
@@ -16,12 +16,8 @@ This is the mixed package - contains sever-side implementation in Python and PHP
 
 # PHP Installation
 
-```
-{
-    "require": {
-        "alex-kalanis/kw_input": "2.4"
-    }
-}
+```bash
+composer.phar require alex-kalanis/kw_input
 ```
 
 (Refer to [Composer Documentation](https://github.com/composer/composer/blob/master/doc/00-intro.md#introduction) if you are not

@@ -1,12 +1,16 @@
 <?php
 
+namespace BasicTests;
+
+
+use CommonTestClass;
 use kalanis\kw_input\Entries;
 use kalanis\kw_input\Interfaces;
 
 
 class EntryTest extends CommonTestClass
 {
-    public function testEntry()
+    public function testEntry(): void
     {
         $data = new Entries\Entry();
         $this->assertInstanceOf(Interfaces\IEntry::class, $data);
@@ -31,7 +35,7 @@ class EntryTest extends CommonTestClass
         $this->assertEmpty($data->getValue());
     }
 
-    public function testFile()
+    public function testFile(): void
     {
         $data = new Entries\FileEntry();
         $this->assertInstanceOf(Interfaces\IEntry::class, $data);

@@ -18,3 +18,8 @@ __pycache__
 phpunit
 phpunit-*
 .phpunit*
+
+# do not use
+/discard
+/php-src/discard
+/php-tests/discard
